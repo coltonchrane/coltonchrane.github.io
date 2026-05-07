@@ -15,7 +15,7 @@
             </div>
             <div class="header-content">
                 <h1>Colton T. Chrane</h1>
-                <p class="subtitle">Software Engineer & Full-Stack Developer</p>
+                <p class="subtitle">Software Engineer</p>
                 <div class="contact-links">
                     <a href="mailto:coltonchrane@gmail.com"><i class="fas fa-envelope"></i> Email</a>
                     <a href="https://github.com/coltonchrane" target="_blank"><i class="fab fa-github"></i> GitHub</a>
@@ -29,77 +29,15 @@
         <section id="about">
             <h2>About Me</h2>
             <p>
-                I am a versatile Software Engineer with a passion for building scalable, high-performance applications. 
-                With expertise spanning backend systems in Kotlin and .NET to modern frontend frameworks like React and Vue, 
-                I enjoy solving complex architectural challenges and streamlining development workflows through robust CI/CD practices.
+                I am a versatile Software Engineer with a deep-rooted expertise in Linux environments and a passion for architecting robust Infrastructure as Code. While many focus solely on the code, I take immense pride in understanding the full scope of computing—from the hardware and virtualization layers (I'm a Proxmox enthusiast) to the high-level financial APIs I orchestrate daily. This "full-stack" perspective allows me to build systems that aren't just functional, but truly resilient and performant.
+            </p>
+            <p style="margin-top: 1rem;">
+                Personally, I'm a father of two living in Austin, though I frequently split my time on my family's ranch in Abilene. When I'm not deep in a terminal or chasing around kids, I'll likely find me outdoors on the water, working on a hands-on project, or lost in music. Between art and engineering, I've always been driven by the love of creating something meaningful.
             </p>
         </section>
 
-        <section id="projects">
-            <h2>Public Projects</h2>
-            <div class="project-grid">
-                <!-- AutoNotes -->
-                <a href="https://coltonchrane.github.io/AutoNotes/" class="project-card" target="_blank">
-                    <div class="project-content">
-                        <h3>AutoNotes</h3>
-                        <p>Generative Knowledge Engine that utilizes Gemini AI for high-precision, context-aware documents. Used to instruct my local agents on how to accomplish tasks while reducing resource consumption.</p>
-                        <div class="tags">
-                            <span>Python</span><span>Gemini AI</span><span>Automation</span>
-                        </div>
-                    </div>
-                </a>
-
-                <!-- Setlist Bot -->
-                <a href="https://github.com/coltonchrane/setlistbot" class="project-card" target="_blank">
-                    <div class="project-content">
-                        <h3>Setlist Bot</h3>
-                        <p>A smart Discord bot that pulls historical concert data. It bridges the Discord, MusicBrainz, and setlist.fm APIs to bring real-time setlist information directly into your server.</p>
-                        <div class="tags">
-                            <span>Python</span><span>Discord API</span><span>REST APIs</span>
-                        </div>
-                    </div>
-                </a>
-
-                <!-- TaskFlow -->
-                <a href="https://github.com/coltonchrane/taskflow" class="project-card" target="_blank">
-                    <div class="project-content">
-                        <div class="card-header">
-                            <h3>TaskFlow</h3>
-                            <span class="badge wip">WIP</span>
-                        </div>
-                        <p>A collaborative task management platform with a Kotlin/Micronaut backend, React frontend, and native Android app.</p>
-                        <div class="tags">
-                            <span>Kotlin</span><span>React</span><span>Android</span><span>Docker</span>
-                        </div>
-                    </div>
-                </a>
-
-                <!-- ConkySwag -->
-                <a href="https://gist.github.com/coltonchrane/9050659dcfc094698afd65a1f2f9234d" class="project-card" target="_blank">
-                    <div class="project-content">
-                        <h3>ConkySwag</h3>
-                        <p>A flashy, custom system monitor configuration I wrote to give my personal Ubuntu machine that extra bit of "terminal aesthetic."</p>
-                        <div class="tags">
-                            <span>Lua</span><span>Conky</span><span>Ubuntu</span>
-                        </div>
-                    </div>
-                </a>
-
-                <!-- WeatherApp -->
-                <a href="https://github.com/coltonchrane/weatherApp" class="project-card" target="_blank">
-                    <div class="project-content">
-                        <h3>WeatherApp</h3>
-                        <p>A weekly weather forecasting app used as a sandbox for experimenting with GitHub Actions and Tailscale.</p>
-                        <div class="tags">
-                            <span>Web</span><span>CI/CD</span><span>Tailscale</span>
-                        </div>
-                    </div>
-                </a>
-            </div>
-        </section>
-
         <section id="experience">
-            <div class="section-header" onclick="toggleExperience()">
+            <div class="section-header" onclick="toggleSection('experience')">
                 <h2>Professional Journey</h2>
                 <button id="experience-toggle" class="toggle-btn"><i class="fas fa-chevron-up"></i></button>
             </div>
@@ -107,7 +45,7 @@
                 <div class="timeline">
                     <div class="timeline-item">
                         <h3>Software Engineer</h3>
-                        <p class="company">FinTech & Logistics Solutions</p>
+                        <p class="company">Logistics Brokerage Platform</p>
                         <p class="description">
                             Currently, I'm deep in the world of high-scale financial logistics. My day-to-day involves orchestrating a complex ecosystem of Kotlin and .NET 9 services. I recently led a major migration to .NET 9, focusing on squeezing every bit of performance out of our financial APIs. 
                         </p>
@@ -117,7 +55,7 @@
                     </div>
                     <div class="timeline-item">
                         <h3>Full-Stack Developer</h3>
-                        <p class="company">Public Sector Modernization</p>
+                        <p class="company">State Government Web Apps</p>
                         <p class="description">
                             I had the unique opportunity to help modernize the digital infrastructure for the Texas legislature. I worked with a tight-knit team to breathe new life into legacy WinForm systems, transforming them into unified, responsive web applications.
                         </p>
@@ -139,34 +77,112 @@
             </div>
         </section>
 
+        <section id="projects">
+            <div class="section-header" onclick="toggleSection('projects')">
+                <h2>Public Projects</h2>
+                <button id="projects-toggle" class="toggle-btn"><i class="fas fa-chevron-up"></i></button>
+            </div>
+            <div id="projects-content" class="collapsible-content expanded">
+                <div class="project-grid">
+                    <!-- AutoNotes -->
+                    <a href="https://coltonchrane.github.io/AutoNotes/" class="project-card" target="_blank">
+                        <div class="project-content">
+                            <h3>AutoNotes</h3>
+                            <p>Generative Knowledge Engine that utilizes Gemini AI for high-precision, context-aware documents. Used to instruct my local agents on how to accomplish tasks while reducing resource consumption.</p>
+                            <div class="tags">
+                                <span>Python</span><span>Gemini AI</span><span>Automation</span>
+                            </div>
+                        </div>
+                    </a>
+
+                    <!-- Setlist Bot -->
+                    <a href="https://github.com/coltonchrane/setlistbot" class="project-card" target="_blank">
+                        <div class="project-content">
+                            <h3>Setlist Bot</h3>
+                            <p>A smart Discord bot that pulls historical concert data. It bridges the Discord, MusicBrainz, and setlist.fm APIs to bring real-time setlist information directly into your server.</p>
+                            <div class="tags">
+                                <span>Python</span><span>Discord API</span><span>REST APIs</span>
+                            </div>
+                        </div>
+                    </a>
+
+                    <!-- TaskFlow -->
+                    <a href="https://github.com/coltonchrane/taskflow" class="project-card" target="_blank">
+                        <div class="project-content">
+                            <div class="card-header">
+                                <h3>TaskFlow</h3>
+                                <span class="badge wip">WIP</span>
+                            </div>
+                            <p>A collaborative task management platform with a Kotlin/Micronaut backend, React frontend, and native Android app.</p>
+                            <div class="tags">
+                                <span>Kotlin</span><span>React</span><span>Android</span><span>Docker</span>
+                            </div>
+                        </div>
+                    </a>
+
+                    <!-- ConkySwag -->
+                    <a href="https://gist.github.com/coltonchrane/9050659dcfc094698afd65a1f2f9234d" class="project-card" target="_blank">
+                        <div class="project-content">
+                            <h3>ConkySwag</h3>
+                            <p>A flashy, custom system monitor configuration I wrote to give my personal Ubuntu machine that extra bit of "terminal aesthetic."</p>
+                            <div class="tags">
+                                <span>Lua</span><span>Conky</span><span>Ubuntu</span>
+                            </div>
+                        </div>
+                    </a>
+
+                    <!-- WeatherApp -->
+                    <a href="https://github.com/coltonchrane/weatherApp" class="project-card" target="_blank">
+                        <div class="project-content">
+                            <h3>WeatherApp</h3>
+                            <p>A weekly weather forecasting app used as a sandbox for experimenting with GitHub Actions and Tailscale.</p>
+                            <div class="tags">
+                                <span>Web</span><span>CI/CD</span><span>Tailscale</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </section>
+
         <section id="publications">
-            <h2>Publications & Features</h2>
-            <div class="pub-grid">
-                <a href="#" class="publication-item">
-                    <div class="pub-content">
-                        <h3>An Examination of Tor Technology based Anonymous Internet</h3>
-                        <p class="pub-meta">College Publication | 2015</p>
-                        <p class="description">
-                            A research paper exploring the architectural foundations and security implications of the Tor network, focusing on how it enables anonymous communication over the public internet.
-                        </p>
-                    </div>
-                </a>
-                <a href="https://abilenescene.com/holiday-drink-ideas/" class="publication-item" target="_blank">
-                    <div class="pub-content">
-                        <h3>Abilene Scene: The Art of the Beverage</h3>
-                        <p class="pub-meta">Holiday Drink Ideas | 2021</p>
-                        <p class="description">
-                            A featured profile on my previous career as a beverage program director. Designing a complex cocktail menu and managing a high-volume floor required the same precision, logic, and attention to detail as architecting a scalable API—a realization that ultimately bridged my path into software engineering.
-                        </p>
-                        <span class="project-link">Read Feature <i class="fas fa-arrow-right"></i></span>
-                    </div>
-                </a>
+            <div class="section-header" onclick="toggleSection('publications')">
+                <h2>Publications & Features</h2>
+                <button id="publications-toggle" class="toggle-btn"><i class="fas fa-chevron-up"></i></button>
+            </div>
+            <div id="publications-content" class="collapsible-content expanded">
+                <div class="pub-grid">
+                    <a href="https://proceedings.informingscience.org/InSITE2015/InSITE15p145-153Chrane1636.pdf" class="project-card" target="_blank">
+                        <div class="project-content">
+                            <h3>An Examination of Tor Technology based Anonymous Internet</h3>
+                            <p class="pub-meta">College Publication | 2015</p>
+                            <p class="description">
+                                A research paper exploring the architectural foundations and security implications of the Tor network, focusing on how it enables anonymous communication over the public internet.
+                            </p>
+                            <span class="project-link">View Portfolio <i class="fas fa-arrow-right"></i></span>
+                        </div>
+                    </a>
+                    <a href="https://dashboard.mazsystems.com/webreader/75768?page=58" class="project-card" target="_blank">
+                        <div class="project-content">
+                            <h3>Abilene Scene: The Art of the Beverage</h3>
+                            <p class="pub-meta">Holiday Drink Ideas | 2021</p>
+                            <p class="description">
+                                A featured profile on my previous career as a beverage program director. Designing a complex cocktail menu and managing a high-volume floor required the same precision, logic, and attention to detail as architecting a scalable API—a realization that ultimately bridged my path into software engineering.
+                            </p>
+                            <span class="project-link">Read Feature <i class="fas fa-arrow-right"></i></span>
+                        </div>
+                    </a>
+                </div>
             </div>
         </section>
 
         <section id="skills">
-            <h2>Technical Expertise</h2>
-            <div class="skills-container">
+            <div class="section-header" onclick="toggleSection('skills')">
+                <h2>Technical Expertise</h2>
+                <button id="skills-toggle" class="toggle-btn"><i class="fas fa-chevron-up"></i></button>
+            </div>
+            <div id="skills-content" class="collapsible-content expanded">
+                <div class="skills-container">
                 <div class="skill-category wide">
                     <h4>Software Languages & Frameworks</h4>
                     <div class="skills-grid-inner">
@@ -322,20 +338,24 @@
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    const fills = entry.target.querySelectorAll('.skill-bar-fill');
-                    fills.forEach(fill => {
-                        fill.style.width = fill.getAttribute('data-width');
-                    });
+                    animateSkills(entry.target);
                     observer.unobserve(entry.target);
                 }
             });
         }, observerOptions);
 
-        observer.observe(document.querySelector('#skills'));
+        function animateSkills(container) {
+            const fills = container.querySelectorAll('.skill-bar-fill');
+            fills.forEach(fill => {
+                fill.style.width = fill.getAttribute('data-width');
+            });
+        }
 
-        function toggleExperience() {
-            const content = document.getElementById('experience-content');
-            const toggle = document.getElementById('experience-toggle');
+        observer.observe(document.querySelector('#skills-content'));
+
+        function toggleSection(sectionId) {
+            const content = document.getElementById(sectionId + '-content');
+            const toggle = document.getElementById(sectionId + '-toggle');
             const icon = toggle.querySelector('i');
             
             if (content.classList.contains('expanded')) {
@@ -348,6 +368,11 @@
                 content.classList.add('expanded');
                 icon.classList.remove('fa-chevron-down');
                 icon.classList.add('fa-chevron-up');
+                
+                // If expanding skills, ensure animation runs
+                if (sectionId === 'skills') {
+                    animateSkills(content);
+                }
             }
         }
     </script>
