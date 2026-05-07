@@ -10,11 +10,11 @@
     <script>mermaid.initialize({ startOnLoad: true, theme: 'dark' });</script>
 </head>
 <body>
-    <!-- Modal for Deep Dives -->
+    <!-- Modal for System Design Diagrams -->
     <div id="diagram-modal" class="modal">
         <div class="modal-content">
             <span class="close-modal">&times;</span>
-            <h3 id="modal-title">Project Architecture</h3>
+            <h3 id="modal-title">System Design</h3>
             <div id="mermaid-container" class="mermaid"></div>
         </div>
     </div>
@@ -139,12 +139,12 @@
                         <div class="project-content">
                             <div class="card-header">
                                 <h3>AutoNotes</h3>
-                                <button class="deep-dive-btn" onclick="openDiagram('AutoNotes')" data-architecture="graph TD
+                                <button class="system-design-btn" onclick="openDiagram('AutoNotes')" data-architecture="graph TD
     A[User Input] --> B(Python CLI)
     B --> C{Gemini AI}
     C --> D[Context-Aware Docs]
     D --> E[Local Agent Instructions]
-    E --> F[Automated Tasks]"><i class="fas fa-project-diagram"></i> Deep Dive</button>
+    E --> F[Automated Tasks]"><i class="fas fa-project-diagram"></i> System Design</button>
                             </div>
                             <p>Generative Knowledge Engine that utilizes Gemini AI for high-precision, context-aware documents. Used to instruct my local agents on how to accomplish tasks while reducing resource consumption.</p>
                             <div class="tags">
@@ -159,13 +159,13 @@
                         <div class="project-content">
                             <div class="card-header">
                                 <h3>Setlist Bot</h3>
-                                <button class="deep-dive-btn" onclick="openDiagram('Setlist Bot')" data-architecture="graph LR
+                                <button class="system-design-btn" onclick="openDiagram('Setlist Bot')" data-architecture="graph LR
     A[Discord] --> B(Python Bot)
     B --> C[Setlist.fm API]
     B --> D[MusicBrainz API]
     C --> B
     D --> B
-    B --> E[Concert Data]"><i class="fas fa-project-diagram"></i> Deep Dive</button>
+    B --> E[Concert Data]"><i class="fas fa-project-diagram"></i> System Design</button>
                             </div>
                             <p>A smart Discord bot that pulls historical concert data. It bridges the Discord, MusicBrainz, and setlist.fm APIs to bring real-time setlist information directly into your server.</p>
                             <div class="tags">
@@ -181,11 +181,11 @@
                             <div class="card-header">
                                 <h3>TaskFlow</h3>
                                 <span class="badge wip">WIP</span>
-                                <button class="deep-dive-btn" onclick="openDiagram('TaskFlow')" data-architecture="graph TD
+                                <button class="system-design-btn" onclick="openDiagram('TaskFlow')" data-architecture="graph TD
     A[React Web / Android] --> B[Kotlin / Micronaut API]
     B --> C[(PostgreSQL)]
     B --> D[Docker Environment]
-    B --> E[Auth Service]"><i class="fas fa-project-diagram"></i> Deep Dive</button>
+    B --> E[Auth Service]"><i class="fas fa-project-diagram"></i> System Design</button>
                             </div>
                             <p>A collaborative task management platform with a Kotlin/Micronaut backend, React frontend, and native Android app.</p>
                             <div class="tags">
@@ -510,7 +510,7 @@
             const btn = event.currentTarget;
             const architecture = btn.getAttribute('data-architecture');
             
-            modalTitle.innerText = `${projectName} Architecture`;
+            modalTitle.innerText = `${projectName} - System Design`;
             modal.style.display = 'block';
             document.body.style.overflow = 'hidden'; // Prevent scroll
 

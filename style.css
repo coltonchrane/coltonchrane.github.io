@@ -441,7 +441,7 @@ section h2 {
     margin-bottom: 0;
 }
 
-.deep-dive-btn {
+.system-design-btn {
     background: none;
     border: 1px solid var(--primary-color);
     color: var(--primary-color);
@@ -456,7 +456,7 @@ section h2 {
     gap: 0.4rem;
 }
 
-.deep-dive-btn:hover {
+.system-design-btn:hover {
     background-color: var(--primary-color);
     color: white;
 }
