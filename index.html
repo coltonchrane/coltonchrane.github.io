@@ -8,6 +8,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
     <script>mermaid.initialize({ startOnLoad: true, theme: 'dark' });</script>
+    <script type="module">
+        import { pipeline } from 'https://cdn.jsdelivr.net/npm/@xenova/transformers@2.17.2';
+        window.aiPipeline = pipeline;
+    </script>
 </head>
 <body>
     <!-- Modal for System Design Diagrams -->
@@ -538,8 +542,10 @@
         const aiMessages = document.getElementById('ai-messages');
 
         let KNOWLEDGE_BASE = {};
+        let generator = null;
+        let isModelLoading = false;
 
-        // Load Knowledge Base independently
+        // Load Knowledge Base
         fetch('knowledge.json')
             .then(response => response.json())
             .then(data => {
@@ -547,10 +553,27 @@
             })
             .catch(err => console.error('Error loading knowledge base:', err));
 
+        async function initModel() {
+            if (generator || isModelLoading) return;
+            isModelLoading = true;
+            addMessage("Initializing local AI model (this may take a moment)...", 'bot');
+            try {
+                // Using a very small model for web performance: Xenova/TinyLlama-1.1B-Chat-v1.0 (quantized)
+                // or Xenova/Qwen1.5-0.5B-Chat for even smaller footprint
+                generator = await window.aiPipeline('text-generation', 'Xenova/Qwen1.5-0.5B-Chat');
+                addMessage("Local AI is online. I've indexed Colton's portfolio data.", 'bot');
+            } catch (err) {
+                console.error('Model loading failed:', err);
+                addMessage("Local AI failed to load. Falling back to keyword matching.", 'bot');
+            }
+            isModelLoading = false;
+        }
+
         chatToggle.onclick = () => {
             chatWindow.style.display = chatWindow.style.display === 'flex' ? 'none' : 'flex';
             if (chatWindow.style.display === 'flex') {
                 chatInput.focus();
+                initModel();
             }
         };
 
@@ -564,32 +587,62 @@
             aiMessages.scrollTop = aiMessages.scrollHeight;
         }
 
-        function handleChat() {
-            const text = chatInput.value.trim().toLowerCase();
-            if (!text) return;
+        async function handleChat() {
+            const userInput = chatInput.value.trim();
+            if (!userInput) return;
 
-            addMessage(chatInput.value, 'user');
+            addMessage(userInput, 'user');
             chatInput.value = '';
 
-            // Simulate "thinking"
             const thinking = document.createElement('div');
             thinking.className = 'ai-message bot';
             thinking.innerText = '...';
             aiMessages.appendChild(thinking);
             aiMessages.scrollTop = aiMessages.scrollHeight;
 
-            setTimeout(() => {
-                aiMessages.removeChild(thinking);
-                let response = "I'm not sure about that. Try asking about .NET, Kotlin, his projects, or his Proxmox lab!";
-                
-                for (const key in KNOWLEDGE_BASE) {
-                    if (text.includes(key)) {
-                        response = KNOWLEDGE_BASE[key];
-                        break;
+            if (generator) {
+                try {
+                    // Simple RAG-lite: find relevant key in knowledge base
+                    let context = "";
+                    const lowerInput = userInput.toLowerCase();
+                    for (const key in KNOWLEDGE_BASE) {
+                        if (lowerInput.includes(key)) {
+                            context += KNOWLEDGE_BASE[key] + " ";
+                        }
                     }
+
+                    const prompt = `<|im_start|>system\nYou are an AI assistant for Colton Chrane's portfolio. Use this context to answer: ${context || "Colton is a Software Engineer specializing in .NET, Kotlin, and Proxmox."}<|im_end|>\n<|im_start|>user\n${userInput}<|im_end|>\n<|im_start|>assistant\n`;
+
+                    const output = await generator(prompt, {
+                        max_new_tokens: 100,
+                        temperature: 0.7,
+                        do_sample: true,
+                        stop: ["<|im_end|>"]
+                    });
+
+                    aiMessages.removeChild(thinking);
+                    let response = output[0].generated_text.split('assistant\n')[1] || "I'm having trouble phrasing that. Ask me about Colton's skills!";
+                    addMessage(response.trim(), 'bot');
+                } catch (err) {
+                    console.error('Generation error:', err);
+                    aiMessages.removeChild(thinking);
+                    addMessage("Something went wrong with the local model.", 'bot');
                 }
-                addMessage(response, 'bot');
-            }, 600);
+            } else {
+                // Fallback to keyword matching if model isn't ready
+                setTimeout(() => {
+                    aiMessages.removeChild(thinking);
+                    let response = "Still loading the local brain... try again in a second!";
+                    const lowerInput = userInput.toLowerCase();
+                    for (const key in KNOWLEDGE_BASE) {
+                        if (lowerInput.includes(key)) {
+                            response = KNOWLEDGE_BASE[key];
+                            break;
+                        }
+                    }
+                    addMessage(response, 'bot');
+                }, 600);
+            }
         }
 
         sendChat.onclick = handleChat;
