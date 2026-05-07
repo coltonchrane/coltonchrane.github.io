@@ -6,8 +6,42 @@
     <title>Colton T. Chrane | Software Engineer Portfolio</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({ startOnLoad: true, theme: 'dark' });</script>
 </head>
 <body>
+    <!-- Modal for System Design Diagrams -->
+    <div id="diagram-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h3 id="modal-title">System Design</h3>
+            <div id="mermaid-container" class="mermaid"></div>
+        </div>
+    </div>
+
+    <!-- AI Assistant Chat -->
+    <div id="ai-chat-container" class="ai-chat-container">
+        <div id="ai-chat-window" class="ai-chat-window">
+            <div class="ai-chat-header">
+                <div class="ai-status-dot"></div>
+                <span>Colton's AI Assistant</span>
+                <button id="close-chat" class="close-chat">&times;</button>
+            </div>
+            <div id="ai-messages" class="ai-messages">
+                <div class="ai-message bot">
+                    Hi! I'm Colton's virtual assistant. Ask me about his experience with .NET, Kotlin, or his Proxmox lab!
+                </div>
+            </div>
+            <div class="ai-chat-input">
+                <input type="text" id="chat-input" placeholder="Type a message...">
+                <button id="send-chat"><i class="fas fa-paper-plane"></i></button>
+            </div>
+        </div>
+        <button id="ai-chat-toggle" class="ai-chat-toggle" aria-label="Open AI Assistant">
+            <i class="fas fa-robot"></i>
+        </button>
+    </div>
+
     <button class="menu-toggle" aria-label="Toggle Menu">
         <i class="fas fa-bars"></i>
     </button>
@@ -101,40 +135,65 @@
             <div id="projects-content" class="collapsible-content expanded">
                 <div class="project-grid">
                     <!-- AutoNotes -->
-                    <a href="https://coltonchrane.github.io/AutoNotes/" class="project-card" target="_blank">
+                    <div class="project-card">
                         <div class="project-content">
-                            <h3>AutoNotes</h3>
+                            <div class="card-header">
+                                <h3>AutoNotes</h3>
+                                <button class="system-design-btn" onclick="openDiagram('AutoNotes')" data-architecture="graph TD
+    A[User Input] --> B(Python CLI)
+    B --> C{Gemini AI}
+    C --> D[Context-Aware Docs]
+    D --> E[Local Agent Instructions]
+    E --> F[Automated Tasks]"><i class="fas fa-project-diagram"></i> System Design</button>
+                            </div>
                             <p>Generative Knowledge Engine that utilizes Gemini AI for high-precision, context-aware documents. Used to instruct my local agents on how to accomplish tasks while reducing resource consumption.</p>
                             <div class="tags">
                                 <span>Python</span><span>Gemini AI</span><span>Automation</span>
                             </div>
+                            <a href="https://coltonchrane.github.io/AutoNotes/" class="project-link" target="_blank">View Project <i class="fas fa-arrow-right"></i></a>
                         </div>
-                    </a>
+                    </div>
 
                     <!-- Setlist Bot -->
-                    <a href="https://github.com/coltonchrane/setlistbot" class="project-card" target="_blank">
+                    <div class="project-card">
                         <div class="project-content">
-                            <h3>Setlist Bot</h3>
+                            <div class="card-header">
+                                <h3>Setlist Bot</h3>
+                                <button class="system-design-btn" onclick="openDiagram('Setlist Bot')" data-architecture="graph LR
+    A[Discord] --> B(Python Bot)
+    B --> C[Setlist.fm API]
+    B --> D[MusicBrainz API]
+    C --> B
+    D --> B
+    B --> E[Concert Data]"><i class="fas fa-project-diagram"></i> System Design</button>
+                            </div>
                             <p>A smart Discord bot that pulls historical concert data. It bridges the Discord, MusicBrainz, and setlist.fm APIs to bring real-time setlist information directly into your server.</p>
                             <div class="tags">
                                 <span>Python</span><span>Discord API</span><span>REST APIs</span>
                             </div>
+                            <a href="https://github.com/coltonchrane/setlistbot" class="project-link" target="_blank">View Source <i class="fas fa-arrow-right"></i></a>
                         </div>
-                    </a>
+                    </div>
 
                     <!-- TaskFlow -->
-                    <a href="https://github.com/coltonchrane/taskflow" class="project-card" target="_blank">
+                    <div class="project-card">
                         <div class="project-content">
                             <div class="card-header">
                                 <h3>TaskFlow</h3>
                                 <span class="badge wip">WIP</span>
+                                <button class="system-design-btn" onclick="openDiagram('TaskFlow')" data-architecture="graph TD
+    A[React Web / Android] --> B[Kotlin / Micronaut API]
+    B --> C[(PostgreSQL)]
+    B --> D[Docker Environment]
+    B --> E[Auth Service]"><i class="fas fa-project-diagram"></i> System Design</button>
                             </div>
                             <p>A collaborative task management platform with a Kotlin/Micronaut backend, React frontend, and native Android app.</p>
                             <div class="tags">
                                 <span>Kotlin</span><span>React</span><span>Android</span><span>Docker</span>
                             </div>
+                            <a href="https://github.com/coltonchrane/taskflow" class="project-link" target="_blank">View Repository <i class="fas fa-arrow-right"></i></a>
                         </div>
-                    </a>
+                    </div>
 
                     <!-- ConkySwag -->
                     <a href="https://gist.github.com/coltonchrane/9050659dcfc094698afd65a1f2f9234d" class="project-card" target="_blank">
@@ -399,10 +458,19 @@
         const sidebarNav = document.querySelector('.sidebar-nav');
         const header = document.querySelector('header');
 
-        window.addEventListener('scroll', () => {
+        function handleScroll() {
             let current = '';
             const scrollPos = window.pageYOffset;
             const headerHeight = header.offsetHeight;
+
+            // Show/hide sidebar based on scroll position
+            if (scrollPos > headerHeight / 2) {
+                sidebarNav.classList.add('visible');
+                menuToggle.classList.add('visible');
+            } else {
+                sidebarNav.classList.remove('visible');
+                menuToggle.classList.remove('visible');
+            }
 
             // Handle Sticky Position
             if (window.innerWidth > 1300) {
@@ -427,7 +495,109 @@
                     link.classList.add('active');
                 }
             });
-        });
+        }
+
+        window.addEventListener('scroll', handleScroll);
+        window.addEventListener('load', handleScroll);
+
+        // Modal Logic
+        const modal = document.getElementById('diagram-modal');
+        const closeModal = document.querySelector('.close-modal');
+        const mermaidContainer = document.getElementById('mermaid-container');
+        const modalTitle = document.getElementById('modal-title');
+
+        function openDiagram(projectName) {
+            const btn = event.currentTarget;
+            const architecture = btn.getAttribute('data-architecture');
+            
+            modalTitle.innerText = `${projectName} - System Design`;
+            modal.style.display = 'block';
+            document.body.style.overflow = 'hidden'; // Prevent scroll
+
+            // Clear and re-render mermaid
+            mermaidContainer.removeAttribute('data-processed');
+            mermaidContainer.innerHTML = architecture;
+            mermaid.contentLoaded();
+        }
+
+        closeModal.onclick = function() {
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        }
+
+        // AI Chat Logic
+        const chatToggle = document.getElementById('ai-chat-toggle');
+        const chatWindow = document.getElementById('ai-chat-window');
+        const closeChat = document.getElementById('close-chat');
+        const chatInput = document.getElementById('chat-input');
+        const sendChat = document.getElementById('send-chat');
+        const aiMessages = document.getElementById('ai-messages');
+
+        const KNOWLEDGE_BASE = {
+            "dotnet": "Colton has 5/5 expertise in C# and the .NET ecosystem, including .NET 9. He's built high-scale financial logistics platforms and royalty payout engines.",
+            "kotlin": "Colton uses Kotlin (4/5) for high-scale services, often with Micronaut and Jetpack Compose. He's currently building TaskFlow with a Kotlin backend.",
+            "proxmox": "Colton is a Proxmox enthusiast! He manages his own home lab and uses virtualization to test infrastructure as code.",
+            "skills": "Key skills: C#/.NET 9, Kotlin, SQL/Postgres, Azure Event Hubs/Kafka, Docker/Proxmox, and GitHub Actions CI/CD.",
+            "projects": "Notable projects: AutoNotes (AI Engine), Setlist Bot (Discord), and TaskFlow (Task Management).",
+            "experience": "Colton has worked at a Logistics Brokerage, the Texas State Government, and a Music/Media tech platform.",
+            "contact": "You can reach Colton at coltonchrane@gmail.com or find him on GitHub at github.com/coltonchrane.",
+            "location": "Colton is based in Austin, TX, but spends time on his family ranch in Abilene."
+        };
+
+        chatToggle.onclick = () => {
+            chatWindow.style.display = chatWindow.style.display === 'flex' ? 'none' : 'flex';
+            if (chatWindow.style.display === 'flex') {
+                chatInput.focus();
+            }
+        };
+
+        closeChat.onclick = () => chatWindow.style.display = 'none';
+
+        function addMessage(text, sender) {
+            const msg = document.createElement('div');
+            msg.className = `ai-message ${sender}`;
+            msg.innerText = text;
+            aiMessages.appendChild(msg);
+            aiMessages.scrollTop = aiMessages.scrollHeight;
+        }
+
+        function handleChat() {
+            const text = chatInput.value.trim().toLowerCase();
+            if (!text) return;
+
+            addMessage(chatInput.value, 'user');
+            chatInput.value = '';
+
+            // Simulate "thinking"
+            const thinking = document.createElement('div');
+            thinking.className = 'ai-message bot';
+            thinking.innerText = '...';
+            aiMessages.appendChild(thinking);
+            aiMessages.scrollTop = aiMessages.scrollHeight;
+
+            setTimeout(() => {
+                aiMessages.removeChild(thinking);
+                let response = "I'm not sure about that. Try asking about .NET, Kotlin, his projects, or his Proxmox lab!";
+                
+                for (const key in KNOWLEDGE_BASE) {
+                    if (text.includes(key)) {
+                        response = KNOWLEDGE_BASE[key];
+                        break;
+                    }
+                }
+                addMessage(response, 'bot');
+            }, 600);
+        }
+
+        sendChat.onclick = handleChat;
+        chatInput.onkeypress = (e) => { if (e.key === 'Enter') handleChat(); };
 
         function toggleSection(sectionId) {
             const content = document.getElementById(sectionId + '-content');
