@@ -7,28 +7,28 @@
         "github": "https://github.com/coltonchrane",
         "role": "Software Engineer"
     },
-    "bio": "Versatile Software Engineer with expertise in Linux, Infrastructure as Code, and Proxmox. Father of two, split time between Austin and a family ranch in Abilene. Passionate about resilient systems and high-scale financial APIs.",
+    "bio": "Versatile Software Engineer with expertise in .Net, SQL,System Design/Architecture,PostegreSql, Azure, Kotlin, Docker, Networking, React, Linux, Infrastructure as Code,Gemini, Claude, Ollama, and Proxmox. Father of two, split time between Austin and a family ranch in Abilene. Passionate about resilient systems, creating things that make people's lives better, robust and low latency APIs.",
     "skills": {
         "languages": "C# (5/5), Kotlin (4/5), JavaScript/TypeScript (3/5), Python (3/5), Java (3/5), SQL (5/5)",
-        "frameworks": ".NET 9, Micronaut, Jetpack Compose, Blazor, React, Vue, Angular, Django",
-        "infrastructure": "Proxmox, Docker, Kubernetes, Azure, AWS, GitHub Actions CI/CD",
+        "frameworks": ".NET 3-10, Micronaut, Jetpack Compose, Blazor, React, Vue, Angular, Django",
+        "infrastructure": "Proxmox, Docker, Kubernetes, Azure, AWS, GitHub Actions CI/CD, terra form/ Terragrunt, vercel, self hosting, cloud flare",
         "data_messaging": "PostgreSQL, Azure Event Hubs, Kafka, Redis, Elasticsearch, Protobuf"
     },
     "experience": [
         {
             "role": "Software Engineer",
             "company": "Logistics Brokerage Platform",
-            "highlights": "Orchestrating Kotlin and .NET 9 services, led migration to .NET 9, managing distributed systems with Azure Event Hubs and Kafka for financial data reliability."
+            "highlights": "Developing high performance Kotlin and .NET 9 APIs that are distributed, decoupled, and used pub sub messaging. resiliant databases in SQL, postgressql, cockroachDB. Used ORMs to map data and migrations tools like flyway. I led migration to .NET 9 from framework. creating new integrations used by others. implemented new features. I managed distributed systems with Azure Event Hubs and Kafka for data reliability."
         },
         {
             "role": "Full-Stack Developer",
             "company": "Texas State Government",
-            "highlights": "Modernized legacy WinForm systems into responsive web apps, migrated legacy version control to GitHub Actions CI/CD."
+            "highlights": "Modernized legacy WinForm systems into responsive web apps, migrated legacy version control to GitHub Actions CI/CD. developed and maintained spa style web apps using.net, SQL, angular. also, entity frameworks orms. "
         },
         {
             "role": " .NET Developer",
             "company": "Music & Media Tech Platform",
-            "highlights": "Built math-based validation engine for automated royalty payouts, implemented Redis caching and real-time exchange rate integrations."
+            "highlights": "Built math-based validation engine for automated royalty payouts, implemented Redis caching and real-time exchange rate integrations. develop features and maintained apis used in public-facing mobile apps and web apps for live music performances. developed and managed websites and web apps that handled payment processing and background. service jobs triggered in azure. tons of experience handling public-facing websites, the security it entails and the management of a user base. this code base was also a monolithic database and website that ran on a VM and exposed me to tons of experience debugging that with things like memory leaks. my favorite job I've ever had and the perfect blend of humility, technical excellence and creativity. "
         }
     ],
     "projects": [
