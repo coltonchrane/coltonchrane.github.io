@@ -1,10 +1,51 @@
 {
-    "dotnet": "Colton has 5/5 expertise in C# and the .NET ecosystem, including .NET 9. He's built high-scale financial logistics platforms and royalty payout engines.",
-    "kotlin": "Colton uses Kotlin (4/5) for high-scale services, often with Micronaut and Jetpack Compose. He's currently building TaskFlow with a Kotlin backend.",
-    "proxmox": "Colton is a Proxmox enthusiast! He manages his own home lab and uses virtualization to test infrastructure as code.",
-    "skills": "Key skills: C#/.NET 9, Kotlin, SQL/Postgres, Azure Event Hubs/Kafka, Docker/Proxmox, and GitHub Actions CI/CD.",
-    "projects": "Notable projects: AutoNotes (AI Engine), Setlist Bot (Discord), and TaskFlow (Task Management).",
-    "experience": "Colton has worked at a Logistics Brokerage, the Texas State Government, and a Music/Media tech platform.",
-    "contact": "You can reach Colton at coltonchrane@gmail.com or find him on GitHub at github.com/coltonchrane.",
-    "location": "Colton is based in Austin, TX, but spends time on his family ranch in Abilene."
+    "system_prompt": "You are a helpful, professional, and slightly witty AI assistant for Colton Chrane's portfolio. You answer questions based ONLY on the provided context. If you don't know the answer, politely suggest contacting Colton. Keep responses concise (under 3 sentences).",
+    "personal_info": {
+        "name": "Colton T. Chrane",
+        "location": "Austin, TX (and Abilene, TX)",
+        "email": "coltonchrane@gmail.com",
+        "github": "https://github.com/coltonchrane",
+        "role": "Software Engineer"
+    },
+    "bio": "Versatile Software Engineer with expertise in Linux, Infrastructure as Code, and Proxmox. Father of two, split time between Austin and a family ranch in Abilene. Passionate about resilient systems and high-scale financial APIs.",
+    "skills": {
+        "languages": "C# (5/5), Kotlin (4/5), JavaScript/TypeScript (3/5), Python (3/5), Java (3/5), SQL (5/5)",
+        "frameworks": ".NET 9, Micronaut, Jetpack Compose, Blazor, React, Vue, Angular, Django",
+        "infrastructure": "Proxmox, Docker, Kubernetes, Azure, AWS, GitHub Actions CI/CD",
+        "data_messaging": "PostgreSQL, Azure Event Hubs, Kafka, Redis, Elasticsearch, Protobuf"
+    },
+    "experience": [
+        {
+            "role": "Software Engineer",
+            "company": "Logistics Brokerage Platform",
+            "highlights": "Orchestrating Kotlin and .NET 9 services, led migration to .NET 9, managing distributed systems with Azure Event Hubs and Kafka for financial data reliability."
+        },
+        {
+            "role": "Full-Stack Developer",
+            "company": "Texas State Government",
+            "highlights": "Modernized legacy WinForm systems into responsive web apps, migrated legacy version control to GitHub Actions CI/CD."
+        },
+        {
+            "role": " .NET Developer",
+            "company": "Music & Media Tech Platform",
+            "highlights": "Built math-based validation engine for automated royalty payouts, implemented Redis caching and real-time exchange rate integrations."
+        }
+    ],
+    "projects": [
+        {
+            "name": "AutoNotes",
+            "tech": "Python, Gemini AI",
+            "description": "Generative Knowledge Engine for high-precision, context-aware documents used to instruct local agents."
+        },
+        {
+            "name": "Setlist Bot",
+            "tech": "Python, Discord API, REST APIs",
+            "description": "Discord bot bridging MusicBrainz and setlist.fm APIs for historical concert data."
+        },
+        {
+            "name": "TaskFlow",
+            "tech": "Kotlin, Micronaut, React, Android, Docker",
+            "description": "Collaborative task management platform with Kotlin backend and cross-platform frontends."
+        }
+    ]
 }

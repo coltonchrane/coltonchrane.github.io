@@ -602,20 +602,16 @@
 
             if (generator) {
                 try {
-                    // Simple RAG-lite: find relevant key in knowledge base
-                    let context = "";
-                    const lowerInput = userInput.toLowerCase();
-                    for (const key in KNOWLEDGE_BASE) {
-                        if (lowerInput.includes(key)) {
-                            context += KNOWLEDGE_BASE[key] + " ";
-                        }
-                    }
+                    // Dynamically build context from the entire KNOWLEDGE_BASE JSON
+                    // We'll flatten the JSON into a searchable string context
+                    const contextString = JSON.stringify(KNOWLEDGE_BASE);
+                    const systemPrompt = KNOWLEDGE_BASE.system_prompt || "You are an AI assistant for Colton Chrane's portfolio.";
 
-                    const prompt = `<|im_start|>system\nYou are an AI assistant for Colton Chrane's portfolio. Use this context to answer: ${context || "Colton is a Software Engineer specializing in .NET, Kotlin, and Proxmox."}<|im_end|>\n<|im_start|>user\n${userInput}<|im_end|>\n<|im_start|>assistant\n`;
+                    const prompt = `<|im_start|>system\n${systemPrompt}\nContext: ${contextString}<|im_end|>\n<|im_start|>user\n${userInput}<|im_end|>\n<|im_start|>assistant\n`;
 
                     const output = await generator(prompt, {
-                        max_new_tokens: 100,
-                        temperature: 0.7,
+                        max_new_tokens: 150,
+                        temperature: 0.2, // Lower temperature for more factual responses
                         do_sample: true,
                         stop: ["<|im_end|>"]
                     });
