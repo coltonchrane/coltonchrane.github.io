@@ -240,6 +240,25 @@ section h2 {
     margin-bottom: 1.25rem;
 }
 
+.skill-group {
+    margin-bottom: 2rem;
+}
+
+.skill-sub-item {
+    margin-left: 1.5rem;
+    margin-top: -0.5rem;
+    margin-bottom: 1rem;
+}
+
+.skill-sub-item .skill-bar-bg {
+    height: 4px;
+}
+
+.skill-sub-item .skill-info {
+    font-size: 0.85rem;
+    opacity: 0.8;
+}
+
 .skill-info {
     display: flex;
     justify-content: space-between;
