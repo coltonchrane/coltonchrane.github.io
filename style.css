@@ -140,7 +140,16 @@ header {
     left: 4rem;
     top: 25rem; 
     z-index: 50;
-    transition: top 0.3s ease;
+    transition: top 0.3s ease, opacity 0.3s ease, transform 0.3s ease;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateX(-20px);
+}
+
+.sidebar-nav.visible {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateX(0);
 }
 
 .toc ul {
@@ -200,6 +209,16 @@ header {
     font-size: 1.25rem;
     align-items: center;
     justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    transform: translateY(20px);
+}
+
+.menu-toggle.visible {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
 }
 
 @media (max-width: 1300px) {
@@ -218,6 +237,9 @@ header {
 
     .sidebar-nav.active {
         left: 0;
+        opacity: 1;
+        pointer-events: auto;
+        transform: translateX(0);
     }
 
     .menu-toggle {
@@ -419,6 +441,26 @@ section h2 {
     margin-bottom: 0;
 }
 
+.deep-dive-btn {
+    background: none;
+    border: 1px solid var(--primary-color);
+    color: var(--primary-color);
+    padding: 0.3rem 0.6rem;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.deep-dive-btn:hover {
+    background-color: var(--primary-color);
+    color: white;
+}
+
 .badge {
     font-size: 0.7rem;
     padding: 0.2rem 0.5rem;
@@ -542,6 +584,203 @@ section h2 {
     background: linear-gradient(90deg, var(--accent-color), var(--primary-color));
     border-radius: 4px;
     transition: width 1.5s cubic-bezier(0.1, 0, 0.2, 1);
+}
+
+/* Modal Styling */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 2000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
+    overflow: auto;
+}
+
+.modal-content {
+    background-color: var(--card-bg);
+    margin: 5% auto;
+    padding: 2rem;
+    border: 1px solid var(--border-color);
+    width: 90%;
+    max-width: 1000px;
+    border-radius: 16px;
+    position: relative;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+.close-modal {
+    color: var(--text-color);
+    position: absolute;
+    right: 1.5rem;
+    top: 1rem;
+    font-size: 2rem;
+    font-weight: bold;
+    cursor: pointer;
+    opacity: 0.6;
+}
+
+.close-modal:hover {
+    opacity: 1;
+}
+
+#modal-title {
+    margin-bottom: 2rem;
+    color: var(--primary-color);
+    font-size: 1.5rem;
+}
+
+#mermaid-container {
+    background: white; /* Mermaid diagrams often look better on white or specifically themed backgrounds */
+    padding: 2rem;
+    border-radius: 8px;
+    overflow-x: auto;
+}
+
+@media (prefers-color-scheme: dark) {
+    #mermaid-container {
+        background: #1e293b;
+    }
+}
+
+/* AI Chat Styling */
+.ai-chat-container {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    z-index: 2000;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.ai-chat-toggle {
+    width: 3.5rem;
+    height: 3.5rem;
+    border-radius: 50%;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.ai-chat-toggle:hover {
+    transform: scale(1.1);
+}
+
+.ai-chat-window {
+    display: none;
+    width: 350px;
+    height: 450px;
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    flex-direction: column;
+    overflow: hidden;
+    margin-bottom: 1rem;
+}
+
+.ai-chat-header {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-weight: 600;
+}
+
+.ai-status-dot {
+    width: 8px;
+    height: 8px;
+    background-color: #4ade80;
+    border-radius: 50%;
+    box-shadow: 0 0 0 2px rgba(74, 222, 128, 0.2);
+}
+
+.close-chat {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    margin-left: auto;
+    cursor: pointer;
+    opacity: 0.8;
+}
+
+.ai-messages {
+    flex-grow: 1;
+    padding: 1rem;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.ai-message {
+    max-width: 80%;
+    padding: 0.75rem 1rem;
+    border-radius: 12px;
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+.ai-message.bot {
+    align-self: flex-start;
+    background-color: var(--border-color);
+    color: var(--text-color);
+    border-bottom-left-radius: 2px;
+}
+
+.ai-message.user {
+    align-self: flex-end;
+    background-color: var(--primary-color);
+    color: white;
+    border-bottom-right-radius: 2px;
+}
+
+.ai-chat-input {
+    padding: 1rem;
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    gap: 0.5rem;
+}
+
+.ai-chat-input input {
+    flex-grow: 1;
+    background-color: var(--bg-color);
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
+    padding: 0.5rem 0.75rem;
+    border-radius: 8px;
+    outline: none;
+}
+
+.ai-chat-input button {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+@media (max-width: 480px) {
+    .ai-chat-window {
+        width: calc(100vw - 2rem);
+        height: 400px;
+    }
 }
 
 footer {
