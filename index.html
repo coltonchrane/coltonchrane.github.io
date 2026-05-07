@@ -8,22 +8,38 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
+    <button class="menu-toggle" aria-label="Toggle Menu">
+        <i class="fas fa-bars"></i>
+    </button>
+
     <header>
-        <div class="container header-flex">
+        <div class="header-container header-flex">
             <div class="profile-container">
                 <img src="images/coltAndKids.JPG" alt="Colton T. Chrane" class="profile-img">
             </div>
             <div class="header-content">
                 <h1>Colton T. Chrane</h1>
-                <p class="subtitle">Software Engineer</p>
+                <p class="subtitle">Software Engineer <span class="location-sep">•</span> <span class="header-location"><i class="fas fa-map-marker-alt"></i> Austin, TX</span></p>
                 <div class="contact-links">
                     <a href="mailto:coltonchrane@gmail.com"><i class="fas fa-envelope"></i> Email</a>
                     <a href="https://github.com/coltonchrane" target="_blank"><i class="fab fa-github"></i> GitHub</a>
-                    <span><i class="fas fa-map-marker-alt"></i> Austin, TX</span>
+                    <a href="resume/Resume 2026 - Colton Chrane.pdf" download class="resume-btn"><i class="fas fa-file-download"></i> Resume</a>
                 </div>
             </div>
         </div>
     </header>
+
+    <aside class="sidebar-nav">
+        <nav class="toc">
+            <ul>
+                <li><a href="#about" class="toc-link">About Me</a></li>
+                <li><a href="#experience" class="toc-link">Experience</a></li>
+                <li><a href="#projects" class="toc-link">Projects</a></li>
+                <li><a href="#publications" class="toc-link">Publications</a></li>
+                <li><a href="#skills" class="toc-link">Skills</a></li>
+            </ul>
+        </nav>
+    </aside>
 <br>
     <main class="container">
         <section id="about">
@@ -352,6 +368,66 @@
         }
 
         observer.observe(document.querySelector('#skills-content'));
+
+        // Mobile Menu Toggle
+        const menuToggle = document.querySelector('.menu-toggle');
+        const sidebar = document.querySelector('.sidebar-nav');
+        
+        menuToggle.addEventListener('click', () => {
+            sidebar.classList.toggle('active');
+            const icon = menuToggle.querySelector('i');
+            icon.classList.toggle('fa-bars');
+            icon.classList.toggle('fa-times');
+        });
+
+        // Close sidebar when clicking a link on mobile
+        const tocLinks = document.querySelectorAll('.toc-link');
+        tocLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth <= 1300) {
+                    sidebar.classList.remove('active');
+                    const icon = menuToggle.querySelector('i');
+                    icon.classList.add('fa-bars');
+                    icon.classList.remove('fa-times');
+                }
+            });
+        });
+
+        // Active Link Highlighting and Sticky Positioning
+        const sections = document.querySelectorAll('section');
+        const navLinks = document.querySelectorAll('.toc-link');
+        const sidebarNav = document.querySelector('.sidebar-nav');
+        const header = document.querySelector('header');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            const scrollPos = window.pageYOffset;
+            const headerHeight = header.offsetHeight;
+
+            // Handle Sticky Position
+            if (window.innerWidth > 1300) {
+                if (scrollPos > headerHeight) {
+                    sidebarNav.style.top = '10vh';
+                } else {
+                    sidebarNav.style.top = (headerHeight + 100 - scrollPos) + 'px';
+                }
+            }
+
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (pageYOffset >= (sectionTop - 200)) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').includes(current)) {
+                    link.classList.add('active');
+                }
+            });
+        });
 
         function toggleSection(sectionId) {
             const content = document.getElementById(sectionId + '-content');
