@@ -224,8 +224,18 @@ section h2 {
 
 .skills-container {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 3rem;
+}
+
+.skill-category.wide {
+    grid-column: 1 / -1;
+}
+
+.skills-grid-inner {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
 }
 
 .skill-category h4 {
@@ -277,9 +287,10 @@ section h2 {
 
 .skill-bar-fill {
     height: 100%;
+    width: 0; /* Initial state for animation */
     background: linear-gradient(90deg, var(--accent-color), var(--primary-color));
     border-radius: 4px;
-    transition: width 1s ease-out;
+    transition: width 1.5s cubic-bezier(0.1, 0, 0.2, 1);
 }
 
 footer {
