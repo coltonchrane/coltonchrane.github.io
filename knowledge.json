@@ -1,61 +1,89 @@
 {
-    "system_prompt": "You are a helpful, professional, and slightly witty AI assistant for Colton Chrane's portfolio. You answer questions based ONLY on the provided context. If you don't know the answer, politely suggest contacting Colton. Keep responses concise (under 3 sentences).",
-    "personal_info": {
+    "system_prompt": "You are the virtual assistant for Colton T. Chrane, a versatile Software Engineer. Your goal is to provide accurate, professional, and slightly witty information about Colton's background, skills, and projects. RULES: 1. Answer ONLY based on the provided context. 2. If you don't know the answer, politely suggest contacting Colton at coltonchrane@gmail.com. 3. Keep responses concise (under 3 sentences). 4. If asked about drinks or cocktails, mention his background as a bar director and suggest his favorite: the Oaxacan Old Fashioned.",
+    "profile": {
         "name": "Colton T. Chrane",
-        "location": "Austin, TX (and Abilene, TX)",
+        "location": "Austin, TX (Current) | Abilene, TX (Family Ranch)",
         "email": "coltonchrane@gmail.com",
         "github": "https://github.com/coltonchrane",
-        "role": "Software Engineer"
-    },
-    "bio": "Versatile Software Engineer with expertise in .Net, SQL,System Design/Architecture,PostegreSql, Azure, Kotlin, Docker, Networking, React, Linux, Infrastructure as Code,Gemini, Claude, Ollama, and Proxmox. Father of two, split time between Austin and a family ranch in Abilene. Passionate about resilient systems, creating things that make people's lives better, robust and low latency APIs.",
-    "skills": {
-        "languages": "C# (5/5), Kotlin (4/5), JavaScript/TypeScript (3/5), Python (3/5), Java (3/5), SQL (5/5)",
-        "frameworks": ".NET 3-10, Micronaut, Jetpack Compose, Blazor, React, Vue, Angular, Django",
-        "infrastructure": "Proxmox, Docker, Kubernetes, Azure, AWS, GitHub Actions CI/CD, terra form/ Terragrunt, vercel, self hosting, cloud flare",
-        "data_messaging": "PostgreSQL, Azure Event Hubs, Kafka, Redis, Elasticsearch, Protobuf"
+        "role": "Software Engineer",
+        "philosophy": "Building resilient, performant systems from the hardware up to the API layer."
     },
     "experience": [
         {
             "role": "Software Engineer",
-            "company": "Logistics Brokerage Platform",
-            "highlights": "Developing high performance Kotlin and .NET 9 APIs that are distributed, decoupled, and used pub sub messaging. resiliant databases in SQL, postgressql, cockroachDB. Used ORMs to map data and migrations tools like flyway. I led migration to .NET 9 from framework. creating new integrations used by others. implemented new features. I managed distributed systems with Azure Event Hubs and Kafka for data reliability."
+            "company": "Arrive Logistics",
+            "period": "May 2025 - Present",
+            "highlights": [
+                "Optimizing financial services APIs using Kotlin (Micronaut) and .NET 9.",
+                "Managing distributed systems with Azure Event Hubs, Kafka, and Protobuf for reliable data serialization.",
+                "Leading migrations from .NET Framework to .NET 9 and managing PostgreSQL databases.",
+                "Utilizing Terragrunt and GitHub Actions for Infrastructure as Code (IaC) and CI/CD."
+            ]
         },
         {
             "role": "Full-Stack Developer",
-            "company": "Texas State Government",
-            "highlights": "Modernized legacy WinForm systems into responsive web apps, migrated legacy version control to GitHub Actions CI/CD. developed and maintained spa style web apps using.net, SQL, angular. also, entity frameworks orms. "
+            "company": "Texas Legislative Council",
+            "period": "January 2025 - May 2025",
+            "highlights": [
+                "Modernized legacy WinForm systems into responsive web applications for the Texas legislature.",
+                "Migrated legacy version control (TFS) to GitHub and implemented GitHub Actions CI/CD.",
+                "Served as a subject matter expert for financial software and SQL database development."
+            ]
         },
         {
             "role": " .NET Developer",
-            "company": "Music & Media Tech Platform",
-            "highlights": "Built math-based validation engine for automated royalty payouts, implemented Redis caching and real-time exchange rate integrations. develop features and maintained apis used in public-facing mobile apps and web apps for live music performances. developed and managed websites and web apps that handled payment processing and background. service jobs triggered in azure. tons of experience handling public-facing websites, the security it entails and the management of a user base. this code base was also a monolithic database and website that ran on a VM and exposed me to tons of experience debugging that with things like memory leaks. my favorite job I've ever had and the perfect blend of humility, technical excellence and creativity. "
+            "company": "MultiTracks.com",
+            "period": "July 2023 - January 2025",
+            "highlights": [
+                "Built a math-based validation engine that automated royalty payouts, reducing a month-long process to one day.",
+                "Implemented Redis caching with robust fail-safes across backend infrastructure.",
+                "Managed a tech stack including .NET 8, Blazor, and Vue.js for a global music tech platform."
+            ]
         }
     ],
+    "skills": {
+        "languages": "C# (.NET 9+), Kotlin (Micronaut), JavaScript/TypeScript (React/Vue/Angular), Python, SQL (PostgreSQL/SQL Server), BASH/ZSH.",
+        "infrastructure": "Proxmox, Docker, Kubernetes, Azure, AWS, Terragrunt, GitHub Actions.",
+        "specialties": "Distributed Systems, Event-Driven Architecture (Kafka/Event Hubs), System Design, RAG/AI Integration."
+    },
     "projects": [
         {
             "name": "AutoNotes",
-            "tech": "Python, Gemini AI",
-            "description": "Generative Knowledge Engine for high-precision, context-aware documents used to instruct local agents."
+            "description": "A Generative Knowledge Engine that uses Gemini AI to turn GitHub issues into structured technical notes for local agents.",
+            "tech": "Python, Gemini AI"
         },
         {
             "name": "Setlist Bot",
-            "tech": "Python, Discord API, REST APIs",
-            "description": "Discord bot bridging MusicBrainz and setlist.fm APIs for historical concert data."
-        },
-        {
-            "name": "TaskFlow",
-            "tech": "Kotlin, Micronaut, React, Android, Docker",
-            "description": "Collaborative task management platform with Kotlin backend and cross-platform frontends."
+            "description": "A Discord bot bridging MusicBrainz and setlist.fm APIs to pull historical concert data.",
+            "tech": "Python, Discord API"
         },
         {
             "name": "ConkySwag",
-            "tech": "Lua, Conky, Ubuntu",
-            "description": "Custom system monitor configuration for Ubuntu with a flashy terminal aesthetic."
+            "description": "Custom system monitor configuration for Ubuntu with a high-end terminal aesthetic.",
+            "tech": "Lua, Conky"
+        }
+    ],
+    "education_publications": [
+        {
+            "title": "Computer Programming Technology",
+            "institution": "Texas State Technical College Abilene",
+            "period": "2019 - 2021"
         },
         {
-            "name": "WeatherApp",
-            "tech": "Web, CI/CD, Tailscale",
-            "description": "Weekly weather forecasting app used as a sandbox for experimenting with GitHub Actions and Tailscale."
+            "title": "Computer Science",
+            "institution": "Coastal Carolina University",
+            "period": "2014 - 2019"
+        },
+        {
+            "title": "An Examination of Tor Technology based Anonymous Internet",
+            "type": "Publication",
+            "year": "2015",
+            "description": "Research paper on the architectural foundations of the Tor network."
         }
-    ]
+    ],
+    "personal_fun_facts": {
+        "interests": "Father of two, spending time on the family ranch in Abilene, outdoors, water, music.",
+        "mixology": "Former Bar Director at 'The Local' in Abilene. Featured in 'Abilene Scene' for his holiday cocktail recipes.",
+        "favorite_drink": "Oaxacan Old Fashioned (Tequila, Mezcal, Hibiscus-Agave syrup, and Mole bitters)."
+    }
 }
