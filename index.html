@@ -26,6 +26,20 @@
         </div>
     </div>
 
+    <!-- Modal for Weather App -->
+    <div id="weather-modal" class="modal">
+        <div class="modal-content weather-modal-content">
+            <span class="close-weather-modal">&times;</span>
+            <h3>WeatherApp - Live Demo</h3>
+            <div class="weather-container">
+                <iframe id="weather-iframe" src="" frameborder="0" width="100%" height="600px" allow="geolocation"></iframe>
+            </div>
+            <div style="margin-top: 1rem; text-align: center;">
+                <a id="weather-site-link" href="#" target="_blank" class="project-link">Open in new tab <i class="fas fa-external-link-alt"></i></a>
+            </div>
+        </div>
+    </div>
+
     <!-- AI Assistant Chat -->
     <div id="ai-chat-container" class="ai-chat-container">
         <div id="ai-chat-window" class="ai-chat-window">
@@ -144,7 +158,7 @@
                         <div class="project-content">
                             <div class="card-header">
                                 <h3>AutoNotes</h3>
-                                <button class="system-design-btn" onclick="event.stopPropagation(); openDiagram('AutoNotes')" data-architecture="graph TD
+                                <button class="system-design-btn" onclick="openDiagram('AutoNotes', this, event)" data-architecture="graph TD
     A[User Input] --> B(Python CLI)
     B --> C{Gemini AI}
     C --> D[Context-Aware Docs]
@@ -163,7 +177,7 @@
                         <div class="project-content">
                             <div class="card-header">
                                 <h3>Setlist Bot</h3>
-                                <button class="system-design-btn" onclick="event.stopPropagation(); openDiagram('Setlist Bot')" data-architecture="graph LR
+                                <button class="system-design-btn" onclick="openDiagram('Setlist Bot', this, event)" data-architecture="graph LR
     A[Discord] --> B(Python Bot)
     B --> C[Setlist.fm API]
     B --> D[MusicBrainz API]
@@ -184,7 +198,7 @@
                             <div class="card-header">
                                 <h3>TaskFlow</h3>
                                 <span class="badge wip">WIP</span>
-                                <button class="system-design-btn" onclick="event.stopPropagation(); openDiagram('TaskFlow')" data-architecture="graph TD
+                                <button class="system-design-btn" onclick="openDiagram('TaskFlow', this, event)" data-architecture="graph TD
     A[React Web / Android] --> B[Kotlin / Micronaut API]
     B --> C[(PostgreSQL)]
     B --> D[Docker Environment]
@@ -202,7 +216,7 @@
                         <div class="project-content">
                             <div class="card-header">
                                 <h3>ConkySwag</h3>
-                                <button class="screenshot-btn" onclick="event.stopPropagation(); openScreenshot('ConkySwag', 'images/conkySwag.png')"><i class="fas fa-image"></i> Screenshot</button>
+                                <button class="screenshot-btn" onclick="openScreenshot('ConkySwag', 'images/conkySwag.png', event)"><i class="fas fa-image"></i> Screenshot</button>
                             </div>
                             <p>A flashy, custom system monitor configuration I wrote to give my personal Ubuntu machine that extra bit of "terminal aesthetic."</p>
                             <div class="tags">
@@ -212,15 +226,18 @@
                     </div>
 
                     <!-- WeatherApp -->
-                    <a href="https://github.com/coltonchrane/weatherApp" class="project-card" target="_blank">
+                    <div class="project-card" onclick="window.open('https://github.com/coltonchrane/weatherApp', '_blank')">
                         <div class="project-content">
-                            <h3>WeatherApp</h3>
+                            <div class="card-header">
+                                <h3>WeatherApp</h3>
+                                <button class="system-design-btn" onclick="openWeatherModal(event)"><i class="fas fa-play"></i> Live Demo</button>
+                            </div>
                             <p>A weekly weather forecasting app used as a sandbox for experimenting with GitHub Actions and Tailscale.</p>
                             <div class="tags">
                                 <span>Web</span><span>CI/CD</span><span>Tailscale</span>
                             </div>
                         </div>
-                    </a>
+                    </div>
                 </div>
             </div>
         </section>
@@ -513,8 +530,8 @@
         const modalImage = document.getElementById('modal-image');
         const modalTitle = document.getElementById('modal-title');
 
-        function openDiagram(projectName) {
-            const btn = event.currentTarget;
+        function openDiagram(projectName, btn, event) {
+            if (event) event.stopPropagation();
             const architecture = btn.getAttribute('data-architecture');
             
             modalTitle.innerText = `${projectName} - System Design`;
@@ -529,11 +546,13 @@
             mermaid.contentLoaded();
         }
 
-        function openScreenshot(projectName, imagePath) {
+        function openScreenshot(projectName, imagePath, event) {
+            if (event) event.stopPropagation();
             modalTitle.innerText = `${projectName} - Screenshot`;
-            mermaidContainer.style.display = 'none';
-            imageContainer.style.display = 'block';
             modalImage.src = imagePath;
+            mermaidContainer.style.display = 'none';
+            mermaidContainer.innerHTML = ''; // Clear mermaid content
+            imageContainer.style.display = 'block';
             modal.style.display = 'block';
             document.body.style.overflow = 'hidden'; // Prevent scroll
         }
@@ -560,7 +579,8 @@
         const weatherSiteLink = document.getElementById('weather-site-link');
         const weatherAppUrl = 'https://weathercolt-abhnaggubzdfd4fa.canadacentral-01.azurewebsites.net/'; // Update with your actual Azure URL
 
-        function openWeatherModal() {
+        function openWeatherModal(event) {
+            if (event) event.stopPropagation();
             weatherIframe.src = weatherAppUrl;
             weatherSiteLink.href = weatherAppUrl;
             weatherModal.style.display = 'block';
