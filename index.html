@@ -18,8 +18,11 @@
     <div id="diagram-modal" class="modal">
         <div class="modal-content">
             <span class="close-modal">&times;</span>
-            <h3 id="modal-title">System Design</h3>
+            <h3 id="modal-title">Project Details</h3>
             <div id="mermaid-container" class="mermaid"></div>
+            <div id="image-container" style="display: none; text-align: center;">
+                <img id="modal-image" src="" alt="Project Screenshot" style="max-width: 100%; border-radius: 8px;">
+            </div>
         </div>
     </div>
 
@@ -27,18 +30,16 @@
     <div id="ai-chat-container" class="ai-chat-container">
         <div id="ai-chat-window" class="ai-chat-window">
             <div class="ai-chat-header">
-                <div class="ai-status-dot"></div>
+                <div id="ai-status-dot" class="ai-status-dot offline" title="Offline"></div>
                 <span>Colton's AI Assistant</span>
                 <button id="close-chat" class="close-chat">&times;</button>
             </div>
             <div id="ai-messages" class="ai-messages">
-                <div class="ai-message bot">
-                    Hi! I'm Colton's virtual assistant. Ask me about his experience with .NET, Kotlin, or his Proxmox lab!
-                </div>
+                <!-- Messages will be added dynamically -->
             </div>
             <div class="ai-chat-input">
                 <input type="text" id="chat-input" placeholder="Type a message...">
-                <button id="send-chat"><i class="fas fa-paper-plane"></i></button>
+                <button id="send-chat" title="Send message"><i class="fas fa-paper-plane"></i></button>
             </div>
         </div>
         <button id="ai-chat-toggle" class="ai-chat-toggle" aria-label="Open AI Assistant">
@@ -197,15 +198,18 @@
                     </div>
 
                     <!-- ConkySwag -->
-                    <a href="https://gist.github.com/coltonchrane/9050659dcfc094698afd65a1f2f9234d" class="project-card" target="_blank">
+                    <div class="project-card" onclick="window.open('https://gist.github.com/coltonchrane/9050659dcfc094698afd65a1f2f9234d', '_blank')">
                         <div class="project-content">
-                            <h3>ConkySwag</h3>
+                            <div class="card-header">
+                                <h3>ConkySwag</h3>
+                                <button class="screenshot-btn" onclick="event.stopPropagation(); openScreenshot('ConkySwag', 'images/conkySwag.png')"><i class="fas fa-image"></i> Screenshot</button>
+                            </div>
                             <p>A flashy, custom system monitor configuration I wrote to give my personal Ubuntu machine that extra bit of "terminal aesthetic."</p>
                             <div class="tags">
                                 <span>Lua</span><span>Conky</span><span>Ubuntu</span>
                             </div>
                         </div>
-                    </a>
+                    </div>
 
                     <!-- WeatherApp -->
                     <a href="https://github.com/coltonchrane/weatherApp" class="project-card" target="_blank">
@@ -505,6 +509,8 @@
         const modal = document.getElementById('diagram-modal');
         const closeModal = document.querySelector('.close-modal');
         const mermaidContainer = document.getElementById('mermaid-container');
+        const imageContainer = document.getElementById('image-container');
+        const modalImage = document.getElementById('modal-image');
         const modalTitle = document.getElementById('modal-title');
 
         function openDiagram(projectName) {
@@ -512,6 +518,8 @@
             const architecture = btn.getAttribute('data-architecture');
             
             modalTitle.innerText = `${projectName} - System Design`;
+            imageContainer.style.display = 'none';
+            mermaidContainer.style.display = 'flex';
             modal.style.display = 'block';
             document.body.style.overflow = 'hidden'; // Prevent scroll
 
@@ -519,6 +527,15 @@
             mermaidContainer.removeAttribute('data-processed');
             mermaidContainer.innerHTML = architecture;
             mermaid.contentLoaded();
+        }
+
+        function openScreenshot(projectName, imagePath) {
+            modalTitle.innerText = `${projectName} - Screenshot`;
+            mermaidContainer.style.display = 'none';
+            imageContainer.style.display = 'block';
+            modalImage.src = imagePath;
+            modal.style.display = 'block';
+            document.body.style.overflow = 'hidden'; // Prevent scroll
         }
 
         closeModal.onclick = function() {
@@ -531,7 +548,32 @@
                 modal.style.display = 'none';
                 document.body.style.overflow = 'auto';
             }
+            if (event.target == document.getElementById('weather-modal')) {
+                closeWeather();
+            }
         }
+
+        // Weather Modal Logic
+        const weatherModal = document.getElementById('weather-modal');
+        const closeWeatherBtn = document.querySelector('.close-weather-modal');
+        const weatherIframe = document.getElementById('weather-iframe');
+        const weatherSiteLink = document.getElementById('weather-site-link');
+        const weatherAppUrl = 'https://YOUR-AZURE-APP-NAME.azurewebsites.net'; // Update with your actual Azure URL
+
+        function openWeatherModal() {
+            weatherIframe.src = weatherAppUrl;
+            weatherSiteLink.href = weatherAppUrl;
+            weatherModal.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeWeather() {
+            weatherModal.style.display = 'none';
+            weatherIframe.src = '';
+            document.body.style.overflow = 'auto';
+        }
+
+        closeWeatherBtn.onclick = closeWeather;
 
         // AI Chat Logic
         const chatToggle = document.getElementById('ai-chat-toggle');
@@ -544,6 +586,7 @@
         let KNOWLEDGE_BASE = {};
         let generator = null;
         let isModelLoading = false;
+        let isGenerating = false;
 
         // Load Knowledge Base
         fetch('knowledge.json')
@@ -556,23 +599,48 @@
         async function initModel() {
             if (generator || isModelLoading) return;
             isModelLoading = true;
+            
+            const statusDot = document.getElementById('ai-status-dot');
+            statusDot.className = 'ai-status-dot initializing';
+            statusDot.title = 'Initializing';
+            
+            // "It should greet you before the model loads"
+            addMessage("Hi! I'm Colton's virtual assistant. Waking up my local brain now...", 'bot');
+            
+            // "second and third message be first" (Loading/Init messages)
             addMessage("Initializing local AI model (this may take a moment)...", 'bot');
+            
             try {
-                // Using a very small model for web performance: Xenova/TinyLlama-1.1B-Chat-v1.0 (quantized)
-                // or Xenova/Qwen1.5-0.5B-Chat for even smaller footprint
+                // Yield to ensure messages are rendered before heavy loading
+                await new Promise(resolve => setTimeout(resolve, 100));
+
                 generator = await window.aiPipeline('text-generation', 'Xenova/Qwen1.5-0.5B-Chat');
+                
+                // "the green bubble not show til its live"
+                statusDot.className = 'ai-status-dot online';
+                statusDot.title = 'Online';
+                
                 addMessage("Local AI is online. I've indexed Colton's portfolio data.", 'bot');
+                
+                // "When its live show the first message now then"
+                // (Referring to the detailed greeting that was originally first)
+                addMessage("Ask me about his experience with .NET, Kotlin, or his Proxmox lab!", 'bot');
             } catch (err) {
                 console.error('Model loading failed:', err);
                 addMessage("Local AI failed to load. Falling back to keyword matching.", 'bot');
+                statusDot.className = 'ai-status-dot offline';
+                statusDot.title = 'Offline';
+            } finally {
+                isModelLoading = false;
             }
-            isModelLoading = false;
         }
 
         chatToggle.onclick = () => {
-            chatWindow.style.display = chatWindow.style.display === 'flex' ? 'none' : 'flex';
-            if (chatWindow.style.display === 'flex') {
+            const isOpen = chatWindow.style.display === 'flex';
+            chatWindow.style.display = isOpen ? 'none' : 'flex';
+            if (!isOpen) {
                 chatInput.focus();
+                // Start initialization if not already started
                 initModel();
             }
         };
@@ -585,14 +653,17 @@
             msg.innerText = text;
             aiMessages.appendChild(msg);
             aiMessages.scrollTop = aiMessages.scrollHeight;
+            return msg;
         }
 
         async function handleChat() {
             const userInput = chatInput.value.trim();
-            if (!userInput) return;
+            // Prevent empty messages or concurrent generation
+            if (!userInput || isGenerating) return;
 
             addMessage(userInput, 'user');
             chatInput.value = '';
+            isGenerating = true;
 
             const thinking = document.createElement('div');
             thinking.className = 'ai-message bot';
@@ -600,10 +671,11 @@
             aiMessages.appendChild(thinking);
             aiMessages.scrollTop = aiMessages.scrollHeight;
 
+            // Yield to allow UI to show user message and thinking indicator
+            await new Promise(resolve => setTimeout(resolve, 50));
+
             if (generator) {
                 try {
-                    // Dynamically build context from the entire KNOWLEDGE_BASE JSON
-                    // We'll flatten the JSON into a searchable string context
                     const contextString = JSON.stringify(KNOWLEDGE_BASE);
                     const systemPrompt = KNOWLEDGE_BASE.system_prompt || "You are an AI assistant for Colton Chrane's portfolio.";
 
@@ -611,27 +683,34 @@
 
                     const output = await generator(prompt, {
                         max_new_tokens: 150,
-                        temperature: 0.2, // Lower temperature for more factual responses
+                        temperature: 0.2,
                         do_sample: true,
                         stop: ["<|im_end|>"]
                     });
 
-                    aiMessages.removeChild(thinking);
+                    if (aiMessages.contains(thinking)) {
+                        aiMessages.removeChild(thinking);
+                    }
+                    
                     let response = output[0].generated_text.split('assistant\n')[1] || "I'm having trouble phrasing that. Ask me about Colton's skills!";
                     addMessage(response.trim(), 'bot');
                 } catch (err) {
                     console.error('Generation error:', err);
-                    aiMessages.removeChild(thinking);
+                    if (aiMessages.contains(thinking)) {
+                        aiMessages.removeChild(thinking);
+                    }
                     addMessage("Something went wrong with the local model.", 'bot');
                 }
             } else {
                 // Fallback to keyword matching if model isn't ready
                 setTimeout(() => {
-                    aiMessages.removeChild(thinking);
+                    if (aiMessages.contains(thinking)) {
+                        aiMessages.removeChild(thinking);
+                    }
                     let response = "Still loading the local brain... try again in a second!";
                     const lowerInput = userInput.toLowerCase();
                     for (const key in KNOWLEDGE_BASE) {
-                        if (lowerInput.includes(key)) {
+                        if (typeof KNOWLEDGE_BASE[key] === 'string' && lowerInput.includes(key)) {
                             response = KNOWLEDGE_BASE[key];
                             break;
                         }
@@ -639,10 +718,16 @@
                     addMessage(response, 'bot');
                 }, 600);
             }
+            isGenerating = false;
         }
 
         sendChat.onclick = handleChat;
-        chatInput.onkeypress = (e) => { if (e.key === 'Enter') handleChat(); };
+        chatInput.onkeydown = (e) => { 
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                handleChat();
+            }
+        };
 
         function toggleSection(sectionId) {
             const content = document.getElementById(sectionId + '-content');
