@@ -8,9 +8,45 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
     <script>mermaid.initialize({ startOnLoad: true, theme: 'dark' });</script>
-    <script type="module">
-        import { pipeline } from 'https://cdn.jsdelivr.net/npm/@xenova/transformers@2.17.2';
-        window.aiPipeline = pipeline;
+    <script>
+        // Initialize Web Worker
+        const aiWorker = new Worker('worker.js', { type: 'module' });
+        let isModelReady = false;
+        let workerResolve = null;
+
+        aiWorker.onmessage = (e) => {
+            const { type, data } = e.data;
+            if (type === 'status' && data === 'ready') {
+                isModelReady = true;
+                const statusDot = document.getElementById('ai-status-dot');
+                if (statusDot) {
+                    statusDot.className = 'ai-status-dot online';
+                    statusDot.title = 'Online';
+                }
+                if (workerResolve) {
+                    workerResolve(true);
+                    workerResolve = null;
+                }
+            } else if (type === 'result') {
+                if (workerResolve) {
+                    workerResolve(data);
+                    workerResolve = null;
+                }
+            } else if (type === 'error') {
+                console.error('Worker error:', data);
+                if (workerResolve) {
+                    workerResolve(null);
+                    workerResolve = null;
+                }
+            }
+        };
+
+        async function callWorker(type, data) {
+            return new Promise((resolve) => {
+                workerResolve = resolve;
+                aiWorker.postMessage({ type, data });
+            });
+        }
     </script>
 </head>
 <body>
@@ -114,9 +150,9 @@
                 <div class="timeline">
                     <div class="timeline-item">
                         <h3>Software Engineer</h3>
-                        <p class="company">Logistics Brokerage Platform</p>
+                        <p class="company">Arrive Logistics</p>
                         <p class="description">
-                            Currently, I'm deep in the world of high-scale financial logistics. My day-to-day involves orchestrating a complex ecosystem of Kotlin and .NET 9 services. I recently led a major migration to .NET 9, focusing on squeezing every bit of performance out of our financial APIs. 
+                            Was blessed with the opportunity to work on a high volume freight brokerage platform. My day-to-day involves orchestrating a complex ecosystem of Kotlin and .NET (Core & Framework) services. It was super exciting to work with Terragrunt and adopting an Infrastructure as Code approach.
                         </p>
                         <p class="description">
                             I spend a lot of time thinking about data reliability—managing distributed systems with Azure Event Hubs and Kafka to ensure that critical financial data moves seamlessly across our UI and databases without a hitch.
@@ -124,7 +160,7 @@
                     </div>
                     <div class="timeline-item">
                         <h3>Full-Stack Developer</h3>
-                        <p class="company">State Government Web Apps</p>
+                        <p class="company">Texas Legislative Council</p>
                         <p class="description">
                             I had the unique opportunity to help modernize the digital infrastructure for the Texas legislature. I worked with a tight-knit team to breathe new life into legacy WinForm systems, transforming them into unified, responsive web applications.
                         </p>
@@ -134,7 +170,7 @@
                     </div>
                     <div class="timeline-item">
                         <h3>.NET Developer</h3>
-                        <p class="company">Music & Media Tech Platform</p>
+                        <p class="company">Multitracks.com</p>
                         <p class="description">
                             This was a fast-paced role where I helped manage a global tech stack for music professionals. I built tools that felt like magic to our finance team—like a math-based validation engine that automated royalty payouts, turning a month-long manual process into a single day of automated work.
                         </p>
@@ -604,7 +640,6 @@
         const aiMessages = document.getElementById('ai-messages');
 
         let KNOWLEDGE_BASE = {};
-        let generator = null;
         let isModelLoading = false;
         let isGenerating = false;
 
@@ -617,33 +652,20 @@
             .catch(err => console.error('Error loading knowledge base:', err));
 
         async function initModel() {
-            if (generator || isModelLoading) return;
+            if (isModelReady || isModelLoading) return;
             isModelLoading = true;
             
             const statusDot = document.getElementById('ai-status-dot');
             statusDot.className = 'ai-status-dot initializing';
             statusDot.title = 'Initializing';
             
-            // "It should greet you before the model loads"
             addMessage("Hi! I'm Colton's virtual assistant. Waking up my local brain now...", 'bot');
-            
-            // "second and third message be first" (Loading/Init messages)
             addMessage("Initializing local AI model (this may take a moment)...", 'bot');
             
             try {
-                // Yield to ensure messages are rendered before heavy loading
-                await new Promise(resolve => setTimeout(resolve, 100));
-
-                generator = await window.aiPipeline('text-generation', 'Xenova/Qwen1.5-0.5B-Chat');
-                
-                // "the green bubble not show til its live"
-                statusDot.className = 'ai-status-dot online';
-                statusDot.title = 'Online';
-                
+                await callWorker('load');
+                // Status dot updated in onmessage handler
                 addMessage("Local AI is online. I've indexed Colton's portfolio data.", 'bot');
-                
-                // "When its live show the first message now then"
-                // (Referring to the detailed greeting that was originally first)
                 addMessage("Ask me about his experience with .NET, Kotlin, or his Proxmox lab!", 'bot');
             } catch (err) {
                 console.error('Model loading failed:', err);
@@ -660,7 +682,6 @@
             chatWindow.style.display = isOpen ? 'none' : 'flex';
             if (!isOpen) {
                 chatInput.focus();
-                // Start initialization if not already started
                 initModel();
             }
         };
@@ -678,7 +699,6 @@
 
         async function handleChat() {
             const userInput = chatInput.value.trim();
-            // Prevent empty messages or concurrent generation
             if (!userInput || isGenerating) return;
 
             addMessage(userInput, 'user');
@@ -691,29 +711,32 @@
             aiMessages.appendChild(thinking);
             aiMessages.scrollTop = aiMessages.scrollHeight;
 
-            // Yield to allow UI to show user message and thinking indicator
-            await new Promise(resolve => setTimeout(resolve, 50));
-
-            if (generator) {
+            if (isModelReady) {
                 try {
                     const contextString = JSON.stringify(KNOWLEDGE_BASE);
                     const systemPrompt = KNOWLEDGE_BASE.system_prompt || "You are an AI assistant for Colton Chrane's portfolio.";
-
                     const prompt = `<|im_start|>system\n${systemPrompt}\nContext: ${contextString}<|im_end|>\n<|im_start|>user\n${userInput}<|im_end|>\n<|im_start|>assistant\n`;
 
-                    const output = await generator(prompt, {
-                        max_new_tokens: 150,
-                        temperature: 0.2,
-                        do_sample: true,
-                        stop: ["<|im_end|>"]
+                    const output = await callWorker('generate', {
+                        prompt,
+                        params: {
+                            max_new_tokens: 150,
+                            temperature: 0.2,
+                            do_sample: true,
+                            stop: ["<|im_end|>"]
+                        }
                     });
 
                     if (aiMessages.contains(thinking)) {
                         aiMessages.removeChild(thinking);
                     }
                     
-                    let response = output[0].generated_text.split('assistant\n')[1] || "I'm having trouble phrasing that. Ask me about Colton's skills!";
-                    addMessage(response.trim(), 'bot');
+                    if (output && output[0]) {
+                        let response = output[0].generated_text.split('assistant\n')[1] || "I'm having trouble phrasing that. Ask me about Colton's skills!";
+                        addMessage(response.trim(), 'bot');
+                    } else {
+                        addMessage("Something went wrong with the local model.", 'bot');
+                    }
                 } catch (err) {
                     console.error('Generation error:', err);
                     if (aiMessages.contains(thinking)) {
@@ -722,7 +745,6 @@
                     addMessage("Something went wrong with the local model.", 'bot');
                 }
             } else {
-                // Fallback to keyword matching if model isn't ready
                 setTimeout(() => {
                     if (aiMessages.contains(thinking)) {
                         aiMessages.removeChild(thinking);
