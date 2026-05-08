@@ -813,6 +813,8 @@ footer {
     height: 85vh;
     display: flex;
     flex-direction: column;
+    padding: 1.5rem;
+    overflow: hidden;
 }
 
 .weather-container {
@@ -821,6 +823,12 @@ footer {
     border-radius: 8px;
     overflow: hidden;
     position: relative;
+}
+
+.weather-container iframe {
+    display: block;
+    width: 100%;
+    height: 100%;
 }
 
 .close-weather-modal {
@@ -842,7 +850,7 @@ footer {
 @media (max-width: 768px) {
     .weather-modal-content {
         width: 95%;
-        padding: 1.5rem;
+        padding: 1rem;
         height: 90vh;
     }
 }
