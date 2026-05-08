@@ -442,7 +442,7 @@ section h2 {
     margin-bottom: 0;
 }
 
-.system-design-btn {
+.system-design-btn, .screenshot-btn {
     background: none;
     border: 1px solid var(--primary-color);
     color: var(--primary-color);
@@ -457,7 +457,7 @@ section h2 {
     gap: 0.4rem;
 }
 
-.system-design-btn:hover {
+.system-design-btn:hover, .screenshot-btn:hover {
     background-color: var(--primary-color);
     color: white;
 }
@@ -591,7 +591,7 @@ section h2 {
 .modal {
     display: none;
     position: fixed;
-    z-index: 2000;
+    z-index: 3000;
     left: 0;
     top: 0;
     width: 100%;
@@ -706,8 +706,22 @@ section h2 {
 .ai-status-dot {
     width: 8px;
     height: 8px;
-    background-color: #4ade80;
     border-radius: 50%;
+    display: block; /* Shown by default */
+}
+
+.ai-status-dot.offline {
+    background-color: #ef4444; /* red */
+    box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.2);
+}
+
+.ai-status-dot.initializing {
+    background-color: #f97316; /* orange */
+    box-shadow: 0 0 0 2px rgba(249, 115, 22, 0.2);
+}
+
+.ai-status-dot.online {
+    background-color: #4ade80; /* green */
     box-shadow: 0 0 0 2px rgba(74, 222, 128, 0.2);
 }
 
@@ -794,12 +808,41 @@ footer {
     opacity: 0.7;
 }
 
-@media (max-width: 600px) {
-    header {
-        padding: 3rem 0 2rem;
-    }
-    
-    header h1 {
-        font-size: 2rem;
+.weather-modal-content {
+    max-width: 1100px;
+    height: 85vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.weather-container {
+    flex-grow: 1;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+}
+
+.close-weather-modal {
+    color: var(--text-color);
+    position: absolute;
+    right: 1.5rem;
+    top: 1rem;
+    font-size: 2rem;
+    font-weight: bold;
+    cursor: pointer;
+    opacity: 0.6;
+    z-index: 10;
+}
+
+.close-weather-modal:hover {
+    opacity: 1;
+}
+
+@media (max-width: 768px) {
+    .weather-modal-content {
+        width: 95%;
+        padding: 1.5rem;
+        height: 90vh;
     }
 }

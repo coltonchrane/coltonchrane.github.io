@@ -46,6 +46,16 @@
             "name": "TaskFlow",
             "tech": "Kotlin, Micronaut, React, Android, Docker",
             "description": "Collaborative task management platform with Kotlin backend and cross-platform frontends."
+        },
+        {
+            "name": "ConkySwag",
+            "tech": "Lua, Conky, Ubuntu",
+            "description": "Custom system monitor configuration for Ubuntu with a flashy terminal aesthetic."
+        },
+        {
+            "name": "WeatherApp",
+            "tech": "Web, CI/CD, Tailscale",
+            "description": "Weekly weather forecasting app used as a sandbox for experimenting with GitHub Actions and Tailscale."
         }
     ]
 }
