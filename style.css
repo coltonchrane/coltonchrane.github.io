@@ -63,6 +63,7 @@ header {
     height: 160px;
     border-radius: 24px;
     object-fit: cover;
+    object-position: center top;
     border: 3px solid var(--primary-color);
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
