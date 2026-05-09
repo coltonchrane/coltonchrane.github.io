@@ -265,7 +265,10 @@
                         <div class="project-content">
                             <div class="card-header">
                                 <h3>WeatherApp</h3>
-                                <button class="system-design-btn" onclick="window.openWeatherModal(event)"><i class="fas fa-play"></i> Try It Out</button>
+                                <div class="header-actions">
+                                    <button class="system-design-btn" onclick="window.openDiagram('WeatherApp', this, event)" data-diagram="weatherapp"><i class="fas fa-project-diagram"></i> System Design</button>
+                                    <button class="system-design-btn" onclick="window.openWeatherModal(event)"><i class="fas fa-play"></i> Try It Out</button>
+                                </div>
                             </div>
                             <p>A weekly weather forecasting app used as a sandbox for experimenting with Proxmox, GitHub Actions and Tailscale. Currently hosted on Azure while I improve my homelab.</p>
                             <div class="tags">

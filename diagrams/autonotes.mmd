@@ -1,6 +1,23 @@
-graph TD
-    A[User Input] --> B(Python CLI)
-    B --> C{Gemini AI}
-    C --> D[Context-Aware Docs]
-    D --> E[Local Agent Instructions]
-    E --> F[Automated Tasks]
+graph LR
+    subgraph "Knowledge Capture"
+        A[GitHub Issue] --> B[Gemini AI Engine]
+        B --> C[Draft Technical Note]
+        C --> D[Pull Request]
+    end
+
+    subgraph "Refinement Loop"
+        D --> E[Human Review/Comment]
+        E --> F[Gemini PR Fixer]
+        F --> D
+    end
+
+    subgraph "Publishing"
+        D --> G[Merge to Main]
+        G --> H[Jekyll Build]
+        H --> I[GitHub Pages]
+    end
+
+    subgraph "Consumption"
+        I --> J[User Docs]
+        I --> K[Local AI Agents]
+    end

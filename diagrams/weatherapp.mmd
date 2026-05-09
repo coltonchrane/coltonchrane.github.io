@@ -1,0 +1,24 @@
+graph TD
+    subgraph "GitHub Actions"
+        A[Push to Main] --> B{Build & Test}
+        B --> C[Dockerize App]
+        C --> D[Push to Azure Container Registry]
+        D --> E[Deploy to Azure Web App]
+    end
+
+    subgraph "Azure Environment"
+        F[Azure Web App]
+        subgraph "Docker Container"
+            G[ASP.NET Core Server]
+            H[Angular Frontend]
+            G --- H
+        end
+        F --> G
+    end
+
+    subgraph "Networking"
+        I[Tailscale Mesh] --- F
+        J[External APIs] --- G
+    end
+
+    K[User] -->|HTTPS| F
