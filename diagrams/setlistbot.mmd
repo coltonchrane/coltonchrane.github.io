@@ -1,0 +1,7 @@
+graph LR
+    A[Discord] --> B(Python Bot)
+    B --> C[Setlist.fm API]
+    B --> D[MusicBrainz API]
+    C --> B
+    D --> B
+    B --> E[Concert Data]

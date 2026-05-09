@@ -7,47 +7,7 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
-    <script>mermaid.initialize({ startOnLoad: true, theme: 'dark' });</script>
-    <script>
-        // Initialize Web Worker
-        const aiWorker = new Worker('worker.js', { type: 'module' });
-        let isModelReady = false;
-        let workerResolve = null;
-
-        aiWorker.onmessage = (e) => {
-            const { type, data } = e.data;
-            if (type === 'status' && data === 'ready') {
-                isModelReady = true;
-                const statusDot = document.getElementById('ai-status-dot');
-                if (statusDot) {
-                    statusDot.className = 'ai-status-dot online';
-                    statusDot.title = 'Online';
-                }
-                if (workerResolve) {
-                    workerResolve(true);
-                    workerResolve = null;
-                }
-            } else if (type === 'result') {
-                if (workerResolve) {
-                    workerResolve(data);
-                    workerResolve = null;
-                }
-            } else if (type === 'error') {
-                console.error('Worker error:', data);
-                if (workerResolve) {
-                    workerResolve(null);
-                    workerResolve = null;
-                }
-            }
-        };
-
-        async function callWorker(type, data) {
-            return new Promise((resolve) => {
-                workerResolve = resolve;
-                aiWorker.postMessage({ type, data });
-            });
-        }
-    </script>
+    <script src="script.js?v=1.2" defer></script>
 </head>
 <body>
     <!-- Modal for System Design Diagrams -->
@@ -134,15 +94,25 @@
         <section id="about">
             <h2>About Me</h2>
             <p>
-                I am a versatile Software Engineer with a deep-rooted expertise in Linux environments and a passion for architecting robust Infrastructure as Code. While many focus solely on the code, I take immense pride in understanding the full scope of computing—from the hardware and virtualization layers (I'm a Proxmox enthusiast) to the high-level financial APIs I orchestrate daily. This "full-stack" perspective allows me to build systems that aren't just functional, but truly resilient and performant.
+                I am a versatile Software Engineer with an expertise in backend systems. My passions include: APIs, databases, Linux environments,
+                 CICD automations, and Infrastructure as Code. While many focus solely on the code, I take immense pride in understanding the full
+                  scope of computing—from the hardware and virtualization layers (I'm a Proxmox enthusiast) to the high-level APIs I orchestrate daily.
+                   This "full-stack" perspective allows me to build systems that aren't just functional, but truly resilient and performant. 
+                   Recently I have been expanding my skills on AI. FInding strategies that help me get more done as an engineer with agents. 
+                   Also I really enjoy training my own local agents using Ollama. 
+                   Just like the one found in this browser which is served from the server and computed client side. So it lives purely in the browser.
+                    I hope you enjoy this portfolio as much as I enjoyd building it!
             </p>
             <p style="margin-top: 1rem;">
-                Personally, I'm a father of two living in Austin, though I frequently split my time on my family's ranch in Abilene. When I'm not deep in a terminal or chasing around kids, I'll likely find me outdoors on the water, working on a hands-on project, or lost in music. Between art and engineering, I've always been driven by the love of creating something meaningful.
+                Personally, I'm a father of two living in Austin, though I frequently split my time on my family's ranch in Abilene. 
+                When I'm not deep in a terminal or chasing around kids, I'll likely find me outdoors on the water, 
+                working on a hands-on project, or lost in music. 
+                Between art and engineering, I've always been driven by the love of creating something meaningful.
             </p>
         </section>
 
         <section id="experience">
-            <div class="section-header" onclick="toggleSection('experience')">
+            <div class="section-header" onclick="window.toggleSection('experience')">
                 <h2>Professional Journey</h2>
                 <button id="experience-toggle" class="toggle-btn"><i class="fas fa-chevron-up"></i></button>
             </div>
@@ -152,30 +122,38 @@
                         <h3>Software Engineer</h3>
                         <p class="company">Arrive Logistics</p>
                         <p class="description">
-                            Was blessed with the opportunity to work on a high volume freight brokerage platform. My day-to-day involves orchestrating a complex ecosystem of Kotlin and .NET (Core & Framework) services. It was super exciting to work with Terragrunt and adopting an Infrastructure as Code approach.
+                            Was blessed with the opportunity to work on a high volume freight brokerage platform. 
+                            My day-to-day involves orchestrating a complex ecosystem of Kotlin and .NET (Core & Framework) services.
+                             It was super exciting to work with Terragrunt and adopting an Infrastructure as Code approach.
                         </p>
                         <p class="description">
-                            I spend a lot of time thinking about data reliability—managing distributed systems with Azure Event Hubs and Kafka to ensure that critical financial data moves seamlessly across our UI and databases without a hitch.
+                            I spend a lot of time thinking about data reliability—managing distributed systems with Azure Event Hubs and Kafka 
+                            to ensure that critical financial data moves seamlessly across our UI and databases without a hitch.
                         </p>
                     </div>
                     <div class="timeline-item">
                         <h3>Full-Stack Developer</h3>
                         <p class="company">Texas Legislative Council</p>
                         <p class="description">
-                            I had the unique opportunity to help modernize the digital infrastructure for the Texas legislature. I worked with a tight-knit team to breathe new life into legacy WinForm systems, transforming them into unified, responsive web applications.
+                            I had the unique opportunity to help modernize the digital infrastructure for the Texas legislature. 
+                            I worked with a tight-knit team to breathe new life into legacy WinForm systems, transforming them into unified, responsive web applications.
                         </p>
                         <p class="description">
-                            Beyond the code, I acted as a bridge for the department, helping migrate years of legacy version control into a modern GitHub Actions CI/CD pipeline, ensuring the team could ship updates faster and more reliably.
+                            Beyond the code, I acted as a bridge for the department, helping migrate years of legacy version control into a 
+                            modern GitHub Actions CI/CD pipeline, ensuring the team could ship updates faster and more reliably.
                         </p>
                     </div>
                     <div class="timeline-item">
                         <h3>.NET Developer</h3>
                         <p class="company">Multitracks.com</p>
                         <p class="description">
-                            This was a fast-paced role where I helped manage a global tech stack for music professionals. I built tools that felt like magic to our finance team—like a math-based validation engine that automated royalty payouts, turning a month-long manual process into a single day of automated work.
+                            This was a fast-paced role where I helped manage a global tech stack for music professionals. 
+                            I built powerful tools for our finance team—like a math-based validation service that automated royalty payouts, t
+                            urning a month-long manual process into a single day of automated work.
                         </p>
                         <p class="description">
-                            Whether it was implementing Redis caching for split-second responsiveness or integrating real-time exchange rates, my focus was always on creating tools that solved real-world friction for our users.
+                            Whether it was implementing Redis caching for split-second responsiveness or integrating real-time exchange rates, 
+                            my focus was always on creating tools that solved real-world friction for our users.
                         </p>
                     </div>
                 </div>
@@ -183,7 +161,7 @@
         </section>
 
         <section id="projects">
-            <div class="section-header" onclick="toggleSection('projects')">
+            <div class="section-header" onclick="window.toggleSection('projects')">
                 <h2>Public Projects</h2>
                 <button id="projects-toggle" class="toggle-btn"><i class="fas fa-chevron-up"></i></button>
             </div>
@@ -194,14 +172,12 @@
                         <div class="project-content">
                             <div class="card-header">
                                 <h3>AutoNotes</h3>
-                                <button class="system-design-btn" onclick="openDiagram('AutoNotes', this, event)" data-architecture="graph TD
-    A[User Input] --> B(Python CLI)
-    B --> C{Gemini AI}
-    C --> D[Context-Aware Docs]
-    D --> E[Local Agent Instructions]
-    E --> F[Automated Tasks]"><i class="fas fa-project-diagram"></i> System Design</button>
+                                <div class="header-actions">
+                                    <button class="system-design-btn" onclick="window.openDiagram('AutoNotes', this, event)" data-diagram="autonotes"><i class="fas fa-project-diagram"></i> System Design</button>
+                                </div>
                             </div>
-                            <p>Generative Knowledge Engine that utilizes Gemini AI for high-precision, context-aware documents. Used to instruct my local agents on how to accomplish tasks while reducing resource consumption.</p>
+                            <p>Generative Knowledge Engine that utilizes Gemini AI for high-precision, context-aware documents. 
+                                Used to instruct my local agents on how to accomplish tasks while reducing resource consumption.</p>
                             <div class="tags">
                                 <span>Python</span><span>Gemini AI</span><span>Automation</span>
                             </div>
@@ -213,15 +189,10 @@
                         <div class="project-content">
                             <div class="card-header">
                                 <h3>Setlist Bot</h3>
-                                <button class="system-design-btn" onclick="openDiagram('Setlist Bot', this, event)" data-architecture="graph LR
-    A[Discord] --> B(Python Bot)
-    B --> C[Setlist.fm API]
-    B --> D[MusicBrainz API]
-    C --> B
-    D --> B
-    B --> E[Concert Data]"><i class="fas fa-project-diagram"></i> System Design</button>
+                                <button class="system-design-btn" onclick="window.openDiagram('Setlist Bot', this, event)" data-diagram="setlistbot"><i class="fas fa-project-diagram"></i> System Design</button>
                             </div>
-                            <p>A smart Discord bot that pulls historical concert data. It bridges the Discord, MusicBrainz, and setlist.fm APIs to bring real-time setlist information directly into your server.</p>
+                            <p>A smart Discord bot that pulls historical concert data. It bridges the Discord, MusicBrainz, 
+                                and setlist.fm APIs to bring real-time setlist information directly into your server.</p>
                             <div class="tags">
                                 <span>Python</span><span>Discord API</span><span>REST APIs</span>
                             </div>
@@ -234,11 +205,7 @@
                             <div class="card-header">
                                 <h3>TaskFlow</h3>
                                 <span class="badge wip">WIP</span>
-                                <button class="system-design-btn" onclick="openDiagram('TaskFlow', this, event)" data-architecture="graph TD
-    A[React Web / Android] --> B[Kotlin / Micronaut API]
-    B --> C[(PostgreSQL)]
-    B --> D[Docker Environment]
-    B --> E[Auth Service]"><i class="fas fa-project-diagram"></i> System Design</button>
+                                <button class="system-design-btn" onclick="window.openDiagram('TaskFlow', this, event)" data-diagram="taskflow"><i class="fas fa-project-diagram"></i> System Design</button>
                             </div>
                             <p>A collaborative task management platform with a Kotlin/Micronaut backend, React frontend, and native Android app.</p>
                             <div class="tags">
@@ -252,9 +219,10 @@
                         <div class="project-content">
                             <div class="card-header">
                                 <h3>ConkySwag</h3>
-                                <button class="screenshot-btn" onclick="openScreenshot('ConkySwag', 'images/conkySwag.png', event)"><i class="fas fa-image"></i> Screenshot</button>
+                                <button class="screenshot-btn" onclick="window.openScreenshot('ConkySwag', 'images/conkySwag.png', event)"><i class="fas fa-image"></i> Screenshot</button>
                             </div>
-                            <p>A flashy, custom system monitor configuration I wrote to give my personal Ubuntu machine that extra bit of "terminal aesthetic."</p>
+                            <p>A flashy, custom system monitor configuration I wrote to give my personal Ubuntu machine that extra bit of 
+                                "terminal aesthetic."</p>
                             <div class="tags">
                                 <span>Lua</span><span>Conky</span><span>Ubuntu</span>
                             </div>
@@ -266,7 +234,7 @@
                         <div class="project-content">
                             <div class="card-header">
                                 <h3>WeatherApp</h3>
-                                <button class="system-design-btn" onclick="openWeatherModal(event)"><i class="fas fa-play"></i> Try It Out</button>
+                                <button class="system-design-btn" onclick="window.openWeatherModal(event)"><i class="fas fa-play"></i> Try It Out</button>
                             </div>
                             <p>A weekly weather forecasting app used as a sandbox for experimenting with GitHub Actions and Tailscale.</p>
                             <div class="tags">
@@ -279,7 +247,7 @@
         </section>
 
         <section id="publications">
-            <div class="section-header" onclick="toggleSection('publications')">
+            <div class="section-header" onclick="window.toggleSection('publications')">
                 <h2>Publications & Features</h2>
                 <button id="publications-toggle" class="toggle-btn"><i class="fas fa-chevron-up"></i></button>
             </div>
@@ -290,7 +258,8 @@
                             <h3>An Examination of Tor Technology based Anonymous Internet</h3>
                             <p class="pub-meta">College Publication | 2015</p>
                             <p class="description">
-                                A research paper exploring the architectural foundations and security implications of the Tor network, focusing on how it enables anonymous communication over the public internet.
+                                A research paper exploring the architectural foundations and security implications of the Tor network, f
+                                ocusing on how it enables anonymous communication over the public internet.
                             </p>
                             <span class="project-link">View Portfolio <i class="fas fa-arrow-right"></i></span>
                         </div>
@@ -300,7 +269,10 @@
                             <h3>Abilene Scene: Holiday Cocktails</h3>
                             <p class="pub-meta">Holiday Drink Ideas | 2021</p>
                             <p class="description">
-                                A featured profile on my previous career as a beverage program director. Designing a complex cocktail menu and managing a high-volume floor required the same precision, logic, and attention to detail as architecting a scalable API — a realization that ultimately brought me back into software engineering.
+                                A featured profile on my previous career as a beverage program director. 
+                                Designing a complex cocktail menu and managing a high-volume floor required the same precision, logic,
+                                 and attention to detail as architecting a scalable API — a realization that ultimately brought me back 
+                                 into software engineering.
                             </p>
                             <span class="project-link">Read Feature <i class="fas fa-arrow-right"></i></span>
                         </div>
@@ -310,7 +282,7 @@
         </section>
 
         <section id="skills">
-            <div class="section-header" onclick="toggleSection('skills')">
+            <div class="section-header" onclick="window.toggleSection('skills')">
                 <h2>Technical Expertise</h2>
                 <button id="skills-toggle" class="toggle-btn"><i class="fas fa-chevron-up"></i></button>
             </div>
@@ -462,337 +434,5 @@
             <p>&copy; 2026 Colton T. Chrane. Built for GitHub Pages.</p>
         </div>
     </footer>
-
-    <script>
-        const observerOptions = {
-            threshold: 0.1
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    animateSkills(entry.target);
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, observerOptions);
-
-        function animateSkills(container) {
-            const fills = container.querySelectorAll('.skill-bar-fill');
-            fills.forEach(fill => {
-                fill.style.width = fill.getAttribute('data-width');
-            });
-        }
-
-        observer.observe(document.querySelector('#skills-content'));
-
-        // Mobile Menu Toggle
-        const menuToggle = document.querySelector('.menu-toggle');
-        const sidebar = document.querySelector('.sidebar-nav');
-        
-        menuToggle.addEventListener('click', () => {
-            sidebar.classList.toggle('active');
-            const icon = menuToggle.querySelector('i');
-            icon.classList.toggle('fa-bars');
-            icon.classList.toggle('fa-times');
-        });
-
-        // Close sidebar when clicking a link on mobile
-        const tocLinks = document.querySelectorAll('.toc-link');
-        tocLinks.forEach(link => {
-            link.addEventListener('click', () => {
-                if (window.innerWidth <= 1300) {
-                    sidebar.classList.remove('active');
-                    const icon = menuToggle.querySelector('i');
-                    icon.classList.add('fa-bars');
-                    icon.classList.remove('fa-times');
-                }
-            });
-        });
-
-        // Active Link Highlighting and Sticky Positioning
-        const sections = document.querySelectorAll('section');
-        const navLinks = document.querySelectorAll('.toc-link');
-        const sidebarNav = document.querySelector('.sidebar-nav');
-        const header = document.querySelector('header');
-
-        function handleScroll() {
-            let current = '';
-            const scrollPos = window.pageYOffset;
-            const headerHeight = header.offsetHeight;
-
-            // Show/hide sidebar based on scroll position
-            if (scrollPos > headerHeight / 2) {
-                sidebarNav.classList.add('visible');
-                menuToggle.classList.add('visible');
-            } else {
-                sidebarNav.classList.remove('visible');
-                menuToggle.classList.remove('visible');
-            }
-
-            // Handle Sticky Position
-            if (window.innerWidth > 1300) {
-                if (scrollPos > headerHeight) {
-                    sidebarNav.style.top = '10vh';
-                } else {
-                    sidebarNav.style.top = (headerHeight + 100 - scrollPos) + 'px';
-                }
-            }
-
-            sections.forEach(section => {
-                const sectionTop = section.offsetTop;
-                const sectionHeight = section.clientHeight;
-                if (pageYOffset >= (sectionTop - 200)) {
-                    current = section.getAttribute('id');
-                }
-            });
-
-            navLinks.forEach(link => {
-                link.classList.remove('active');
-                if (link.getAttribute('href').includes(current)) {
-                    link.classList.add('active');
-                }
-            });
-        }
-
-        window.addEventListener('scroll', handleScroll);
-        window.addEventListener('load', handleScroll);
-
-        // Modal Logic
-        const modal = document.getElementById('diagram-modal');
-        const closeModal = document.querySelector('.close-modal');
-        const mermaidContainer = document.getElementById('mermaid-container');
-        const imageContainer = document.getElementById('image-container');
-        const modalImage = document.getElementById('modal-image');
-        const modalTitle = document.getElementById('modal-title');
-
-        function openDiagram(projectName, btn, event) {
-            if (event) event.stopPropagation();
-            const architecture = btn.getAttribute('data-architecture');
-            
-            modalTitle.innerText = `${projectName} - System Design`;
-            imageContainer.style.display = 'none';
-            mermaidContainer.style.display = 'flex';
-            modal.style.display = 'block';
-            document.body.style.overflow = 'hidden'; // Prevent scroll
-
-            // Clear and re-render mermaid
-            mermaidContainer.removeAttribute('data-processed');
-            mermaidContainer.innerHTML = architecture;
-            mermaid.contentLoaded();
-        }
-
-        function openScreenshot(projectName, imagePath, event) {
-            if (event) event.stopPropagation();
-            modalTitle.innerText = `${projectName} - Screenshot`;
-            modalImage.src = imagePath;
-            mermaidContainer.style.display = 'none';
-            mermaidContainer.innerHTML = ''; // Clear mermaid content
-            imageContainer.style.display = 'block';
-            modal.style.display = 'block';
-            document.body.style.overflow = 'hidden'; // Prevent scroll
-        }
-
-        closeModal.onclick = function() {
-            modal.style.display = 'none';
-            document.body.style.overflow = 'auto';
-        }
-
-        window.onclick = function(event) {
-            if (event.target == modal) {
-                modal.style.display = 'none';
-                document.body.style.overflow = 'auto';
-            }
-            if (event.target == document.getElementById('weather-modal')) {
-                closeWeather();
-            }
-        }
-
-        // Weather Modal Logic
-        const weatherModal = document.getElementById('weather-modal');
-        const closeWeatherBtn = document.querySelector('.close-weather-modal');
-        const weatherIframe = document.getElementById('weather-iframe');
-        const weatherSiteLink = document.getElementById('weather-site-link');
-        const weatherAppUrl = 'https://weathercolt-abhnaggubzdfd4fa.canadacentral-01.azurewebsites.net/'; // Update with your actual Azure URL
-
-        function openWeatherModal(event) {
-            if (event) event.stopPropagation();
-            weatherIframe.src = weatherAppUrl;
-            weatherSiteLink.href = weatherAppUrl;
-            weatherModal.style.display = 'block';
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeWeather() {
-            weatherModal.style.display = 'none';
-            weatherIframe.src = '';
-            document.body.style.overflow = 'auto';
-        }
-
-        closeWeatherBtn.onclick = closeWeather;
-
-        // AI Chat Logic
-        const chatToggle = document.getElementById('ai-chat-toggle');
-        const chatWindow = document.getElementById('ai-chat-window');
-        const closeChat = document.getElementById('close-chat');
-        const chatInput = document.getElementById('chat-input');
-        const sendChat = document.getElementById('send-chat');
-        const aiMessages = document.getElementById('ai-messages');
-
-        let KNOWLEDGE_BASE = {};
-        let isModelLoading = false;
-        let isGenerating = false;
-
-        // Load Knowledge Base
-        fetch('knowledge.json')
-            .then(response => response.json())
-            .then(data => {
-                KNOWLEDGE_BASE = data;
-            })
-            .catch(err => console.error('Error loading knowledge base:', err));
-
-        async function initModel() {
-            if (isModelReady || isModelLoading) return;
-            isModelLoading = true;
-            
-            const statusDot = document.getElementById('ai-status-dot');
-            statusDot.className = 'ai-status-dot initializing';
-            statusDot.title = 'Initializing';
-            
-            addMessage("Hi! I'm Colton's virtual assistant. Waking up my local brain now...", 'bot');
-            addMessage("Initializing local AI model (this may take a moment)...", 'bot');
-            
-            try {
-                await callWorker('load');
-                // Status dot updated in onmessage handler
-                addMessage("Local AI is online. I've indexed Colton's portfolio data.", 'bot');
-                addMessage("Ask me about his experience with .NET, Kotlin, or his Proxmox lab!", 'bot');
-            } catch (err) {
-                console.error('Model loading failed:', err);
-                addMessage("Local AI failed to load. Falling back to keyword matching.", 'bot');
-                statusDot.className = 'ai-status-dot offline';
-                statusDot.title = 'Offline';
-            } finally {
-                isModelLoading = false;
-            }
-        }
-
-        chatToggle.onclick = () => {
-            const isOpen = chatWindow.style.display === 'flex';
-            chatWindow.style.display = isOpen ? 'none' : 'flex';
-            if (!isOpen) {
-                chatInput.focus();
-                initModel();
-            }
-        };
-
-        closeChat.onclick = () => chatWindow.style.display = 'none';
-
-        function addMessage(text, sender) {
-            const msg = document.createElement('div');
-            msg.className = `ai-message ${sender}`;
-            msg.innerText = text;
-            aiMessages.appendChild(msg);
-            aiMessages.scrollTop = aiMessages.scrollHeight;
-            return msg;
-        }
-
-        async function handleChat() {
-            const userInput = chatInput.value.trim();
-            if (!userInput || isGenerating) return;
-
-            addMessage(userInput, 'user');
-            chatInput.value = '';
-            isGenerating = true;
-
-            const thinking = document.createElement('div');
-            thinking.className = 'ai-message bot';
-            thinking.innerText = '...';
-            aiMessages.appendChild(thinking);
-            aiMessages.scrollTop = aiMessages.scrollHeight;
-
-            if (isModelReady) {
-                try {
-                    const contextString = JSON.stringify(KNOWLEDGE_BASE);
-                    const systemPrompt = KNOWLEDGE_BASE.system_prompt || "You are an AI assistant for Colton Chrane's portfolio.";
-                    const prompt = `<|im_start|>system\n${systemPrompt}\nContext: ${contextString}<|im_end|>\n<|im_start|>user\n${userInput}<|im_end|>\n<|im_start|>assistant\n`;
-
-                    const output = await callWorker('generate', {
-                        prompt,
-                        params: {
-                            max_new_tokens: 150,
-                            temperature: 0.2,
-                            do_sample: true,
-                            stop: ["<|im_end|>"]
-                        }
-                    });
-
-                    if (aiMessages.contains(thinking)) {
-                        aiMessages.removeChild(thinking);
-                    }
-                    
-                    if (output && output[0]) {
-                        let response = output[0].generated_text.split('assistant\n')[1] || "I'm having trouble phrasing that. Ask me about Colton's skills!";
-                        addMessage(response.trim(), 'bot');
-                    } else {
-                        addMessage("Something went wrong with the local model.", 'bot');
-                    }
-                } catch (err) {
-                    console.error('Generation error:', err);
-                    if (aiMessages.contains(thinking)) {
-                        aiMessages.removeChild(thinking);
-                    }
-                    addMessage("Something went wrong with the local model.", 'bot');
-                }
-            } else {
-                setTimeout(() => {
-                    if (aiMessages.contains(thinking)) {
-                        aiMessages.removeChild(thinking);
-                    }
-                    let response = "Still loading the local brain... try again in a second!";
-                    const lowerInput = userInput.toLowerCase();
-                    for (const key in KNOWLEDGE_BASE) {
-                        if (typeof KNOWLEDGE_BASE[key] === 'string' && lowerInput.includes(key)) {
-                            response = KNOWLEDGE_BASE[key];
-                            break;
-                        }
-                    }
-                    addMessage(response, 'bot');
-                }, 600);
-            }
-            isGenerating = false;
-        }
-
-        sendChat.onclick = handleChat;
-        chatInput.onkeydown = (e) => { 
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                handleChat();
-            }
-        };
-
-        function toggleSection(sectionId) {
-            const content = document.getElementById(sectionId + '-content');
-            const toggle = document.getElementById(sectionId + '-toggle');
-            const icon = toggle.querySelector('i');
-            
-            if (content.classList.contains('expanded')) {
-                content.classList.remove('expanded');
-                content.classList.add('collapsed');
-                icon.classList.remove('fa-chevron-up');
-                icon.classList.add('fa-chevron-down');
-            } else {
-                content.classList.remove('collapsed');
-                content.classList.add('expanded');
-                icon.classList.remove('fa-chevron-down');
-                icon.classList.add('fa-chevron-up');
-                
-                // If expanding skills, ensure animation runs
-                if (sectionId === 'skills') {
-                    animateSkills(content);
-                }
-            }
-        }
-    </script>
 </body>
 </html>
