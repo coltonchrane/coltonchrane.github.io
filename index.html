@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Colton T. Chrane | Software Engineer Portfolio</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
@@ -194,12 +195,13 @@
             <div id="projects-content" class="collapsible-content expanded">
                 <div class="project-grid">
                     <!-- AutoNotes -->
-                    <div class="project-card" onclick="window.open('https://coltonchrane.github.io/AutoNotes/', '_blank')">
+                    <div class="project-card" onclick="window.open('https://github.com/coltonchrane/AutoNotes', '_blank')">
                         <div class="project-content">
                             <div class="card-header">
                                 <h3>AutoNotes</h3>
                                 <div class="header-actions">
                                     <button class="system-design-btn" onclick="window.openDiagram('AutoNotes', this, event)" data-diagram="autonotes"><i class="fas fa-project-diagram"></i> System Design</button>
+                                    <button class="system-design-btn" onclick="window.open('https://coltonchrane.github.io/AutoNotes/', '_blank'); event.stopPropagation();"><i class="fas fa-external-link-alt"></i> Check it out</button>
                                 </div>
                             </div>
                             <p>Generative Knowledge Engine that utilizes Gemini AI for high-precision, context-aware documents. 
