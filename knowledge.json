@@ -58,6 +58,16 @@
             "tech": "Python, Discord API"
         },
         {
+            "name": "TaskFlow",
+            "description": "A collaborative task management platform with a Kotlin/Micronaut backend, React frontend, and native Android app.",
+            "tech": "Kotlin, React, Android, Docker"
+        },
+        {
+            "name": "WeatherApp",
+            "description": "A weekly weather forecasting app featuring a multi-stage deployment pipeline with Azure for production and a Proxmox-based staging environment, integrated with Tailscale.",
+            "tech": "Web, CI/CD, Tailscale, Proxmox, Azure"
+        },
+        {
             "name": "ConkySwag",
             "description": "Custom system monitor configuration for Ubuntu with a high-end terminal aesthetic.",
             "tech": "Lua, Conky"

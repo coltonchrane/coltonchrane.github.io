@@ -3,12 +3,13 @@ graph TD
         A[Push to Main] --> B{Build & Test}
         B --> C[Dockerize App]
         C --> D[Push to Azure Container Registry]
-        D --> E[Deploy to Azure Web App]
+        D --> E[Deploy to Production: Azure]
+        C --> L[Deploy to Staging: Proxmox]
     end
 
-    subgraph "Azure Environment"
+    subgraph "Azure Environment (Production)"
         F[Azure Web App]
-        subgraph "Docker Container"
+        subgraph "Docker Container (Prod)"
             G[ASP.NET Core Server]
             H[Angular Frontend]
             G --- H
@@ -16,9 +17,22 @@ graph TD
         F --> G
     end
 
+    subgraph "Proxmox Server (Staging)"
+        M[VM / LXC Container]
+        subgraph "Docker Container (Staging)"
+            N[ASP.NET Core Server]
+            O[Angular Frontend]
+            N --- O
+        end
+        M --> N
+    end
+
     subgraph "Networking"
         I[Tailscale Mesh] --- F
+        I --- M
         J[External APIs] --- G
+        J --- N
     end
 
     K[User] -->|HTTPS| F
+    K -->|Tailscale/VPN| M
