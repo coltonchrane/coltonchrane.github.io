@@ -36,6 +36,31 @@
         </div>
     </div>
 
+    <!-- Modal for Setlist Bot API -->
+    <div id="setlist-modal" class="modal">
+        <div class="modal-content setlist-modal-content">
+            <span class="close-setlist-modal">&times;</span>
+            <h3>Setlist Bot - API Trial</h3>
+            <p>Enter an artist and date to fetch their concert setlist via the Setlist Bot API.</p>
+            
+            <form id="setlist-form" class="api-form">
+                <div class="form-group">
+                    <label for="artist">Artist Name:</label>
+                    <input type="text" id="artist" name="artist" placeholder="e.g. Billy Strings" required>
+                </div>
+                <div class="form-group">
+                    <label for="date">Date:</label>
+                    <input type="date" id="date" name="date">
+                </div>
+                <button type="submit" class="submit-api-btn">Fetch Setlist</button>
+            </form>
+
+            <div id="setlist-result" class="api-result">
+                <div class="result-placeholder">Results will appear here...</div>
+            </div>
+        </div>
+    </div>
+
     <!-- AI Assistant Chat -->
     <div id="ai-chat-container" class="ai-chat-container">
         <div id="ai-chat-window" class="ai-chat-window">
@@ -98,9 +123,9 @@
                  CICD automations, and Infrastructure as Code. While many focus solely on the code, I take immense pride in understanding the full
                   scope of computing—from the hardware and virtualization layers (I'm a Proxmox enthusiast) to the high-level APIs I orchestrate daily.
                    This "full-stack" perspective allows me to build systems that aren't just functional, but truly resilient and performant. 
-                   Recently I have been expanding my skills on AI. FInding strategies that help me get more done as an engineer with agents. 
+                   Recently I have been expanding my skills on AI. Finding strategies that help me get more done as an engineer with agents. 
                    Also I really enjoy training my own local agents using Ollama. 
-                   Just like the one found in this browser which is served from the server and computed client side. So it lives purely in the browser.
+                   Just like the one found in this browser which is served from the server and computed client side.
                     I hope you enjoy this portfolio as much as I enjoyd building it!
             </p>
             <p style="margin-top: 1rem;">
@@ -147,9 +172,10 @@
                         <h3>.NET Developer</h3>
                         <p class="company">Multitracks.com</p>
                         <p class="description">
-                            This was a fast-paced role where I helped manage a global tech stack for music professionals. 
-                            I built powerful tools for our finance team—like a math-based validation service that automated royalty payouts, t
-                            urning a month-long manual process into a single day of automated work.
+                            This was a fast-paced role where I helped managed an enterprise level tech stack for music professionals globally. 
+                            I built powerful tools for our finance team—like a math-based validation service that automated royalty payouts, 
+                            turning a month-long manual process into a single day of automated work. Maintained and developed APIs
+                            that supported multiple apps and background services.
                         </p>
                         <p class="description">
                             Whether it was implementing Redis caching for split-second responsiveness or integrating real-time exchange rates, 
@@ -189,7 +215,10 @@
                         <div class="project-content">
                             <div class="card-header">
                                 <h3>Setlist Bot</h3>
-                                <button class="system-design-btn" onclick="window.openDiagram('Setlist Bot', this, event)" data-diagram="setlistbot"><i class="fas fa-project-diagram"></i> System Design</button>
+                                <div class="header-actions">
+                                    <button class="system-design-btn" onclick="window.openDiagram('Setlist Bot', this, event)" data-diagram="setlistbot"><i class="fas fa-project-diagram"></i> System Design</button>
+                                    <button class="system-design-btn" onclick="window.openSetlistModal(event)"><i class="fas fa-play"></i> Try the API</button>
+                                </div>
                             </div>
                             <p>A smart Discord bot that pulls historical concert data. It bridges the Discord, MusicBrainz, 
                                 and setlist.fm APIs to bring real-time setlist information directly into your server.</p>
@@ -236,7 +265,7 @@
                                 <h3>WeatherApp</h3>
                                 <button class="system-design-btn" onclick="window.openWeatherModal(event)"><i class="fas fa-play"></i> Try It Out</button>
                             </div>
-                            <p>A weekly weather forecasting app used as a sandbox for experimenting with GitHub Actions and Tailscale.</p>
+                            <p>A weekly weather forecasting app used as a sandbox for experimenting with Proxmox, GitHub Actions and Tailscale. Currently hosted on Azure while I improve my homelab.</p>
                             <div class="tags">
                                 <span>Web</span><span>CI/CD</span><span>Tailscale</span>
                             </div>

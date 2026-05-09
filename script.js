@@ -173,6 +173,33 @@ function closeWeather() {
     }
 }
 
+function openSetlistModal(event) {
+    if (event) {
+        event.stopPropagation();
+        event.preventDefault();
+    }
+    const modal = document.getElementById('setlist-modal');
+    const resultContainer = document.getElementById('setlist-result');
+    const dateInput = document.getElementById('date');
+    
+    if (resultContainer) resultContainer.innerHTML = '<div class="result-placeholder">Results will appear here...</div>';
+    // Keep date empty by default for artist-only search
+    if (dateInput) dateInput.value = '';
+
+    if (modal) {
+        modal.style.display = 'block';
+        document.body.style.overflow = 'hidden';
+    }
+}
+
+function closeSetlist() {
+    const modal = document.getElementById('setlist-modal');
+    if (modal) {
+        modal.style.display = 'none';
+        document.body.style.overflow = 'auto';
+    }
+}
+
 function animateSkills(container) {
     if (!container) return;
     const fills = container.querySelectorAll('.skill-bar-fill');
@@ -219,6 +246,8 @@ window.openScreenshot = openScreenshot;
 window.closeDiagram = closeDiagram;
 window.openWeatherModal = openWeatherModal;
 window.closeWeather = closeWeather;
+window.openSetlistModal = openSetlistModal;
+window.closeSetlist = closeSetlist;
 window.toggleSection = toggleSection;
 
 // UI and Interactivity logic
@@ -346,15 +375,125 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const closeWeatherBtn = document.querySelector('.close-weather-modal');
     if (closeWeatherBtn) closeWeatherBtn.onclick = closeWeather;
+
+    const closeSetlistBtn = document.querySelector('.close-setlist-modal');
+    if (closeSetlistBtn) closeSetlistBtn.onclick = closeSetlist;
+
+    // Setlist API Form Logic
+    const setlistForm = document.getElementById('setlist-form');
+    if (setlistForm) {
+        setlistForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const artist = document.getElementById('artist').value;
+            const dateVal = document.getElementById('date').value;
+            const resultContainer = document.getElementById('setlist-result');
+            
+            if (!resultContainer) return;
+
+            if (window.location.protocol === 'file:') {
+                resultContainer.innerHTML = `<div class="result-placeholder" style="color: #ff4444;">
+                    <i class="fas fa-exclamation-triangle"></i><br>
+                    API requests are blocked on the 'file://' protocol by most browsers.<br>
+                    Please view this portfolio via a web server (e.g. GitHub Pages) to use this feature.
+                </div>`;
+                return;
+            }
+            
+            resultContainer.innerHTML = '<div class="result-placeholder">Fetching data...</div>';
+            
+            // Format YYYY-MM-DD to DD-MM-YYYY for the API
+            let formattedDate = "";
+            if (dateVal) {
+                const parts = dateVal.split('-');
+                formattedDate = `${parts[2]}-${parts[1]}-${parts[0]}`;
+            }
+
+            const fetchDetails = async (artistName, d) => {
+                let apiUrl = `https://setlistapi-b8h4gthpgjcgfcgg.canadacentral-01.azurewebsites.net/api/setlist?artist=${encodeURIComponent(artistName)}`;
+                if (d) apiUrl += `&date=${encodeURIComponent(d)}`;
+                
+                const response = await fetch(apiUrl);
+                if (!response.ok) throw new Error('Failed to fetch setlist');
+                return await response.json();
+            };
+
+            const renderDetails = (sl) => {
+                resultContainer.innerHTML = `<strong>${sl.artist.name} @ ${sl.venue.name} (${sl.eventDate})</strong><br>`;
+                if (sl.sets && sl.sets.set) {
+                    let songIndex = 1;
+                    sl.sets.set.forEach(set => {
+                        const setHeader = document.createElement('div');
+                        setHeader.style.marginTop = '1rem';
+                        setHeader.style.color = 'var(--accent-color)';
+                        setHeader.style.fontWeight = 'bold';
+                        setHeader.innerText = set.name || (set.encore ? 'Encore' : 'Set');
+                        resultContainer.appendChild(setHeader);
+
+                        if (set.song) {
+                            set.song.forEach(song => {
+                                const songDiv = document.createElement('div');
+                                songDiv.className = 'setlist-item';
+                                songDiv.innerText = `${songIndex++}. ${song.name}`;
+                                resultContainer.appendChild(songDiv);
+                            });
+                        }
+                    });
+                } else {
+                    resultContainer.innerHTML += '<div class="result-placeholder">No songs found in this setlist.</div>';
+                }
+            };
+
+            const renderList = (data) => {
+                resultContainer.innerHTML = '<strong>Recent Shows:</strong><br><br>';
+                data.setlist.forEach(sl => {
+                    const item = document.createElement('div');
+                    item.className = 'setlist-item';
+                    item.style.cursor = 'pointer';
+                    item.style.padding = '0.7rem';
+                    item.style.borderRadius = '8px';
+                    item.style.marginBottom = '0.5rem';
+                    item.style.background = 'rgba(255,255,255,0.05)';
+                    item.style.transition = 'background 0.2s';
+                    item.innerHTML = `<i class="fas fa-music" style="margin-right: 10px; opacity: 0.6;"></i> ${sl.eventDate} - ${sl.venue.name}`;
+                    item.onclick = () => {
+                        resultContainer.innerHTML = '<div class="result-placeholder">Loading details...</div>';
+                        renderDetails(sl);
+                    };
+                    item.onmouseover = () => item.style.background = 'rgba(255,255,255,0.1)';
+                    item.onmouseout = () => item.style.background = 'rgba(255,255,255,0.05)';
+                    resultContainer.appendChild(item);
+                });
+            };
+
+            try {
+                const data = await fetchDetails(artist, formattedDate);
+                
+                if (data && data.setlist && data.setlist.length > 0) {
+                    if (data.setlist.length > 1 && !dateVal) {
+                        renderList(data);
+                    } else {
+                        renderDetails(data.setlist[0]);
+                    }
+                } else {
+                    resultContainer.innerHTML = '<div class="result-placeholder">No setlist found for this artist and date.</div>';
+                }
+            } catch (err) {
+                console.error('API Error:', err);
+                resultContainer.innerHTML = `<div class="result-placeholder" style="color: #ff4444;">Error: ${err.message}</div>`;
+            }
+        });
+    }
 });
 
 // Window Global Click handler for Modals
 window.onclick = function(event) {
     const diagramModal = document.getElementById('diagram-modal');
     const weatherModal = document.getElementById('weather-modal');
+    const setlistModal = document.getElementById('setlist-modal');
     
     if (event.target == diagramModal) closeDiagram();
     if (event.target == weatherModal) closeWeather();
+    if (event.target == setlistModal) closeSetlist();
 };
 
 // AI Chat Logic
