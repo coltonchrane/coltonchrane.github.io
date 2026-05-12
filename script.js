@@ -152,23 +152,31 @@ function openWeatherModal(event) {
     const modal = document.getElementById('weather-modal');
     const iframe = document.getElementById('weather-iframe');
     const link = document.getElementById('weather-site-link');
+    const loader = document.getElementById('weather-loader');
     const weatherAppUrl = 'https://weathercolt-abhnaggubzdfd4fa.canadacentral-01.azurewebsites.net/'; 
 
     if (iframe && link && modal) {
+        if (loader) loader.style.display = 'block';
         iframe.src = weatherAppUrl;
         link.href = weatherAppUrl;
         modal.style.display = 'block';
         document.body.style.overflow = 'hidden';
+
+        iframe.onload = function() {
+            if (loader) loader.style.display = 'none';
+        };
     }
 }
 
 function closeWeather() {
     const modal = document.getElementById('weather-modal');
     const iframe = document.getElementById('weather-iframe');
+    const loader = document.getElementById('weather-loader');
 
     if (modal && iframe) {
         modal.style.display = 'none';
         iframe.src = '';
+        if (loader) loader.style.display = 'none';
         document.body.style.overflow = 'auto';
     }
 }
@@ -181,8 +189,10 @@ function openSetlistModal(event) {
     const modal = document.getElementById('setlist-modal');
     const resultContainer = document.getElementById('setlist-result');
     const dateInput = document.getElementById('date');
+    const loader = document.getElementById('setlist-loader');
     
     if (resultContainer) resultContainer.innerHTML = '<div class="result-placeholder">Results will appear here...</div>';
+    if (loader) loader.style.display = 'none';
     // Keep date empty by default for artist-only search
     if (dateInput) dateInput.value = '';
 
@@ -387,6 +397,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const artist = document.getElementById('artist').value;
             const dateVal = document.getElementById('date').value;
             const resultContainer = document.getElementById('setlist-result');
+            const loader = document.getElementById('setlist-loader');
             
             if (!resultContainer) return;
 
@@ -400,6 +411,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             
             resultContainer.innerHTML = '<div class="result-placeholder">Fetching data...</div>';
+            if (loader) loader.style.display = 'block';
             
             // Format YYYY-MM-DD to DD-MM-YYYY for the API
             let formattedDate = "";
@@ -412,16 +424,32 @@ document.addEventListener('DOMContentLoaded', () => {
                 let apiUrl = `https://setlistapi-b8h4gthpgjcgfcgg.canadacentral-01.azurewebsites.net/api/setlist?artist=${encodeURIComponent(artistName)}`;
                 if (d) apiUrl += `&date=${encodeURIComponent(d)}`;
                 
-                const response = await fetch(apiUrl);
-                if (!response.ok) throw new Error('Failed to fetch setlist');
-                return await response.json();
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 15000); // 15 second timeout
+
+                try {
+                    const response = await fetch(apiUrl, { signal: controller.signal });
+                    clearTimeout(timeoutId);
+                    if (!response.ok) throw new Error('Failed to fetch setlist');
+                    return await response.json();
+                } catch (err) {
+                    if (err.name === 'AbortError') {
+                        throw new Error('Request timed out. The API might be waking up (cold start). Please try again.');
+                    }
+                    throw err;
+                }
             };
 
             const renderDetails = (sl) => {
-                resultContainer.innerHTML = `<strong>${sl.artist.name} @ ${sl.venue.name} (${sl.eventDate})</strong><br>`;
+                if (!sl || !sl.artist) {
+                    resultContainer.innerHTML = '<div class="result-placeholder">No setlist details found.</div>';
+                    return;
+                }
+                resultContainer.innerHTML = `<strong>${sl.artist.name} @ ${sl.venue ? sl.venue.name : 'Unknown Venue'} (${sl.eventDate})</strong><br>`;
                 if (sl.sets && sl.sets.set) {
                     let songIndex = 1;
-                    sl.sets.set.forEach(set => {
+                    const sets = Array.isArray(sl.sets.set) ? sl.sets.set : [sl.sets.set];
+                    sets.forEach(set => {
                         const setHeader = document.createElement('div');
                         setHeader.style.marginTop = '1rem';
                         setHeader.style.color = 'var(--accent-color)';
@@ -430,7 +458,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         resultContainer.appendChild(setHeader);
 
                         if (set.song) {
-                            set.song.forEach(song => {
+                            const songs = Array.isArray(set.song) ? set.song : [set.song];
+                            songs.forEach(song => {
                                 const songDiv = document.createElement('div');
                                 songDiv.className = 'setlist-item';
                                 songDiv.innerText = `${songIndex++}. ${song.name}`;
@@ -445,7 +474,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const renderList = (data) => {
                 resultContainer.innerHTML = '<strong>Recent Shows:</strong><br><br>';
-                data.setlist.forEach(sl => {
+                const setlists = Array.isArray(data.setlist) ? data.setlist : [data.setlist];
+                setlists.forEach(sl => {
                     const item = document.createElement('div');
                     item.className = 'setlist-item';
                     item.style.cursor = 'pointer';
@@ -454,7 +484,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     item.style.marginBottom = '0.5rem';
                     item.style.background = 'rgba(255,255,255,0.05)';
                     item.style.transition = 'background 0.2s';
-                    item.innerHTML = `<i class="fas fa-music" style="margin-right: 10px; opacity: 0.6;"></i> ${sl.eventDate} - ${sl.venue.name}`;
+                    item.innerHTML = `<i class="fas fa-music" style="margin-right: 10px; opacity: 0.6;"></i> ${sl.eventDate} - ${sl.venue ? sl.venue.name : 'Unknown Venue'}`;
                     item.onclick = () => {
                         resultContainer.innerHTML = '<div class="result-placeholder">Loading details...</div>';
                         renderDetails(sl);
@@ -467,17 +497,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
             try {
                 const data = await fetchDetails(artist, formattedDate);
+                if (loader) loader.style.display = 'none';
                 
-                if (data && data.setlist && data.setlist.length > 0) {
-                    if (data.setlist.length > 1 && !dateVal) {
-                        renderList(data);
+                const setlists = data && data.setlist ? (Array.isArray(data.setlist) ? data.setlist : [data.setlist]) : [];
+                
+                if (setlists.length > 0) {
+                    if (setlists.length > 1 && !dateVal) {
+                        renderList({ setlist: setlists });
                     } else {
-                        renderDetails(data.setlist[0]);
+                        renderDetails(setlists[0]);
                     }
                 } else {
                     resultContainer.innerHTML = '<div class="result-placeholder">No setlist found for this artist and date.</div>';
                 }
             } catch (err) {
+                if (loader) loader.style.display = 'none';
                 console.error('API Error:', err);
                 resultContainer.innerHTML = `<div class="result-placeholder" style="color: #ff4444;">Error: ${err.message}</div>`;
             }
