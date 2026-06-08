@@ -1,5 +1,5 @@
 // Initialize Mermaid
-console.log("Portfolio Script Loaded - Version 1.4");
+console.log("Portfolio Script Loaded - Version 1.6");
 mermaid.initialize({ 
     startOnLoad: false, 
     theme: 'dark',
